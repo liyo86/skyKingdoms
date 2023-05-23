@@ -42,9 +42,8 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Gems")]
     //Gems
     public GameObject gemPrefab;
-    public int gemCount;
-    
-            
+
+
     [Header("River")]
     //River
     public float riverDepth = 2f;
@@ -66,7 +65,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         GenerateTerrain();
         GenerateMountains();
-        GenerateRiver();
+        //GenerateRiver();
         GenerateTrees();
         GenerateGrass();
         GeneratePlatforms();

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6816269419986260978}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Stem3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4495940974120780942}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: MadFlower_Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 4854826490835202230}
   - component: {fileID: 5002212334923925982}
   - component: {fileID: 1283630542117059432}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Mad Flower
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -134,8 +134,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.628297, z: 1.545382}
-  m_Center: {x: 0, y: 0.7309826, z: 0.272691}
+  m_Size: {x: 0.6018384, y: 0.9277302, z: 0.77880484}
+  m_Center: {x: -0.1990808, y: 0.38069934, z: -0.11059758}
 --- !u!114 &4854826490835202230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,8 +175,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.9383271
-  m_Center: {x: 0, y: 0.74, z: 0.43832648}
+  m_Radius: 0.650102
+  m_Center: {x: 0.015644431, y: 0.94799984, z: 0.27847582}
 --- !u!1 &4173224375455201455
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +187,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8359969930465772254}
   - component: {fileID: 1820034720307260131}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: MadFlower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6652814161085227377}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Stem1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,7 +310,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6664641583139219242}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Stem4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,7 +342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4117377091735740227}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Stem5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +374,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5276589918940035402}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Stem6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +405,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8399940499362050766}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: FlowerLeaves
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -437,7 +437,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1602053882274143809}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Stem2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

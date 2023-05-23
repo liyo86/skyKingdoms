@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 381702531351434025}
   - component: {fileID: 2497495753862227939}
   - component: {fileID: 6666376277363027171}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground park 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}

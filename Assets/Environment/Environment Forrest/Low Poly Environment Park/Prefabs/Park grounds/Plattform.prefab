@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 995358863098063866}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Plattform
   m_TagString: Platform
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 1975344764998778224}
   - component: {fileID: 4363181894913558970}
   - component: {fileID: 4979009679042100614}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: ground park 3 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ GameObject:
   - component: {fileID: 1975344765261937965}
   - component: {fileID: 4363181894100945383}
   - component: {fileID: 4979009679309520347}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: ground park 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}

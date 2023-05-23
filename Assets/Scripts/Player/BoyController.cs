@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Managers;
 using UnityEngine;
@@ -63,17 +62,14 @@ public class BoyController : MonoBehaviour
     private bool isJumping;
     private bool isGrounded = true;
     private bool isDefending;
-    private bool boyControl = true;
+
     #endregion
 
     #region PUBLIC VARIABLES
     public static BoyController Instance;
-    public bool BoyControl
-    {
-        set => boyControl = value;
-    }
+    public bool CanMove { get; set; } = true;
 
-    public bool HasGemBlue = false;
+    public bool HasGemBlue = false; //TODO no me gusta aqui
 
     public bool IsDefending => isDefending;
 
@@ -131,6 +127,7 @@ public class BoyController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //if (!CanMove) return;
         FixedControls();   
     }
 
@@ -171,19 +168,23 @@ public class BoyController : MonoBehaviour
     {
         if (isGrounded)
         {
+            CanMove = false;
+
             movement = Vector2.zero;
             animator.SetTrigger("shoot");
             StartCoroutine(nameof(Shoot));
         }
     }
 
-    private IEnumerator Shoot()
+    IEnumerator Shoot()
     {
         yield return new WaitForSeconds(0.5f);
 
         MyAudioManager.Instance.PlaySfx("fireVoice");
 
         Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
+
+        CanMove = true;
     }
     
     #endregion
@@ -202,7 +203,7 @@ public class BoyController : MonoBehaviour
     #endregion
 
     #region JUMP
-    void OnJumpPerformed(InputAction.CallbackContext context)
+    private void OnJumpPerformed(InputAction.CallbackContext context)
     {
         if (!isJumping && isGrounded)
         {
@@ -219,6 +220,7 @@ public class BoyController : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.down, out hit, groundCheckDistance, groundLayerMask))
         {
             isGrounded = true;
+            CanMove = false;
         }     
 
         if (rb.velocity.y != 0f && !isGrounded)
@@ -227,14 +229,17 @@ public class BoyController : MonoBehaviour
         } else if (rb.velocity.y == 0f && isGrounded)
         {
             isJumping = false;
+            CanMove = true;
         }
     }
     #endregion
     
     #region DEFENSE
 
-    void OnDefensePerformed(InputAction.CallbackContext context)
+    private void OnDefensePerformed(InputAction.CallbackContext context)
     {
+        CanMove = false;
+
         isDefending = true;
         MyAudioManager.Instance.PlaySfx("defenseVoice");
         defensePrefab.SetActive(true);
@@ -246,6 +251,8 @@ public class BoyController : MonoBehaviour
         yield return new WaitForSeconds(3f);
         defensePrefab.SetActive(false);
         isDefending = false;
+
+        CanMove = true;
     }
     
     #endregion

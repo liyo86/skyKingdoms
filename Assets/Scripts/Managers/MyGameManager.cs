@@ -121,7 +121,7 @@ public class MyGameManager : MonoBehaviour
     {
         if (BoyController.Instance != null)
         {
-            BoyController.Instance.BoyControl = false;
+            BoyController.Instance.CanMove = false;
         }
     }
 
@@ -129,7 +129,7 @@ public class MyGameManager : MonoBehaviour
     {
         if (BoyController.Instance != null)
         {
-            BoyController.Instance.BoyControl = true;
+            BoyController.Instance.CanMove = true;
         }
     }
     #endregion

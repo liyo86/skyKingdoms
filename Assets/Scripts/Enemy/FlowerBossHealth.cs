@@ -1,7 +1,8 @@
 using System.Collections;
-using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class FlowerBossHealth : MonoBehaviour
 {
@@ -12,42 +13,33 @@ public class FlowerBossHealth : MonoBehaviour
     private int currentHealth;
     private bool isDead;
     private bool gameOver;
-    
 
     public int CurrentHealth
     {
         get => currentHealth;
+        set => currentHealth = value;
     }
-
-
+    
     public static FlowerBossHealth Instance;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
-
+    
     void Start()
     {
+        Instance = this;
         Init();
     }
 
+    void Init()
+    {
+        Reset();
+    }
+    
     private void Update()
     {
         if(MyGameManager.Instance.gameOver)
             GameOver();
     }
-
-    private void Init()
-    {
-        maxHealth = 100;
-        currentHealth = maxHealth;
-        healthSlider.maxValue = maxHealth;
-        healthSlider.value = currentHealth;
-        isDead = false;
-    }
     
-    public void AddDamage(int damage)
+    void AddDamage(int damage)
     {
         currentHealth -= damage;
 
@@ -62,7 +54,7 @@ public class FlowerBossHealth : MonoBehaviour
     
     IEnumerator ShowDamageEffect()
     {
-        float startTime = Time.deltaTime;
+        float startTime = Time.time;
         float endTime = startTime + 0.5f;  
         float startValue = healthSlider.value;
         float targetValue = currentHealth;
@@ -74,6 +66,24 @@ public class FlowerBossHealth : MonoBehaviour
             yield return null;
         }
     }
+    
+    public void Reset()
+    {
+        maxHealth = 100;
+        currentHealth = maxHealth;
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = currentHealth;
+        isDead = false;
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Fire"))
+        {
+            AddDamage(10);
+        }
+    }
+    
     void Die()
     {
         if (isDead) return; 
@@ -94,13 +104,5 @@ public class FlowerBossHealth : MonoBehaviour
         if (gameOver) return;
         StopAllCoroutines();
         gameOver = true;
-    }
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Fire"))
-        {
-            AddDamage(10);
-        }
     }
 }
