@@ -1,20 +1,18 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MyGameManager : MonoBehaviour
 {
     public static MyGameManager Instance;
-
-    public enum CollectibleTypes { NoType, GemBlue, GemPurple, Type3, Type4, Type5 };
-
+    
     public GameObject GameOverCanvas;
-    private GameObject GameCompleteCanvas;
+    public GameObject animationGameOver;
+    public GameObject menuGameOver;
+    public Animator playerCanvasAnimator;
     public bool gameOver;
 
-    public bool blueGem;
-    public bool purpleGem;
-    public bool redGem;
-
+    #region UNITY METHODS
     private void Awake()
     {
         if (Instance == null)
@@ -31,7 +29,8 @@ public class MyGameManager : MonoBehaviour
     {
         InitMusic();
     }
-
+    #endregion
+    
     void InitMusic()
     {
         string sceneName = SceneManager.GetActiveScene().name;
@@ -67,21 +66,17 @@ public class MyGameManager : MonoBehaviour
         switch (gemType)
         {
             case SimpleCollectibleScript.CollectibleTypes.GemBlue:
-                blueGem = true;
-                BoyController.Instance.HasGemBlue = true;
+                BoyController.Instance.HasGemBlue = true; //TODO cambiar por un manager del nivel
                 break;
             case SimpleCollectibleScript.CollectibleTypes.GemPurple:
-                purpleGem = true;
                 FlightLevel.Instance.LevelComplete();
                 break;
             case SimpleCollectibleScript.CollectibleTypes.GemRed:
-                redGem = true;
                 MazeGenerator.Instance.LevelComplete();
                 break;
         }
     }
-
-
+    
     #region GAME OVER
     public void GameOver()
     {
@@ -91,10 +86,28 @@ public class MyGameManager : MonoBehaviour
             MyAudioManager.Instance.StopAny();
             MyAudioManager.Instance.PlaySfx("gameOverSFX");
             GameOverCanvas.SetActive(true);
+            StartCoroutine(nameof(GameOverAnimation));
         }
     }
 
-    public void GameComplete()
+    IEnumerator GameOverAnimation()
+    {
+        animationGameOver.SetActive(true);
+        
+        playerCanvasAnimator.SetTrigger("dead");
+
+        yield return new WaitForSeconds(3f);
+
+        menuGameOver.SetActive(true);
+    }
+
+    public void RestartLevel()
+    {
+        // TODO control de vidas?
+        playerCanvasAnimator.SetTrigger("continue");
+    }
+    
+    public void LevelComplete()
     {
         if (!gameOver)
         {

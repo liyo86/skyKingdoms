@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameOverCanvas: {fileID: 0}
-  GameCompleteCanvas: {fileID: 0}
-  blueGem: 0
-  purpleGem: 0
-  redGem: 0
+  animationGameOver: {fileID: 0}
+  menuGameOver: {fileID: 0}
+  playerCanvasAnimator: {fileID: 0}
+  gameOver: 0

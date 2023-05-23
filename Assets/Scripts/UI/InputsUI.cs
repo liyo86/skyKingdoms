@@ -67,7 +67,7 @@ public class InputsUI : MonoBehaviour
 
     protected virtual void OnSubmit(InputAction.CallbackContext context)
     {
-        menuCanvas.SetActive(false);
+       
     }
 
     protected void ShowIcon(int option)

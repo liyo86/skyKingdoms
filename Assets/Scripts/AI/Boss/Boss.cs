@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Boss : MonoBehaviour
@@ -44,15 +43,7 @@ public class Boss : MonoBehaviour
 
     #endregion
     
-    #region WAYPOINTS
-    [Header("WayPoints")]
-    private List<Transform> _wayPointsList = new List<Transform>();
-    
-    private int _actualWayPoint = 0;
-    #endregion
-    
     #region IA
-    
     public enum BossPhase
     {
         Phase1,
@@ -102,6 +93,7 @@ public class Boss : MonoBehaviour
     private ParticleSystem shockWaveParticle;
     private Vector3 originalPosition;
     public GameObject AttackPhase1;
+    private bool gameOver;
 
     #region UNITY METHODS
 
@@ -119,6 +111,8 @@ public class Boss : MonoBehaviour
     void Update()
     {
         _currentPhase.Execute(this);
+        if(MyGameManager.Instance.gameOver)
+            GameOver();
     }
     #endregion
     
@@ -160,4 +154,10 @@ public class Boss : MonoBehaviour
         shockWaveParticle.Play();
     }
 
+    void GameOver()
+    {
+        if (gameOver) return;
+        StopAllCoroutines();
+        gameOver = true;
+    }
 }

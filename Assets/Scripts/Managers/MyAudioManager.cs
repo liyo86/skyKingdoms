@@ -107,6 +107,7 @@ public class MyAudioManager : MonoBehaviour
 
     public void StopAny()
     {
+        sourceSFX.Stop();
         sourceMusic.Stop();
     }
 }

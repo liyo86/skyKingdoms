@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
@@ -11,7 +10,8 @@ public class FlowerBossHealth : MonoBehaviour
 
     private int maxHealth;
     private int currentHealth;
-    private bool isDead = false;
+    private bool isDead;
+    private bool gameOver;
     
 
     public int CurrentHealth
@@ -21,10 +21,15 @@ public class FlowerBossHealth : MonoBehaviour
 
 
     public static FlowerBossHealth Instance;
-    
-    void Start()
+
+    private void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
+        Init();
     }
 
     private void Update()
@@ -32,7 +37,15 @@ public class FlowerBossHealth : MonoBehaviour
         if(MyGameManager.Instance.gameOver)
             GameOver();
     }
-    
+
+    private void Init()
+    {
+        maxHealth = 100;
+        currentHealth = maxHealth;
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = currentHealth;
+        isDead = false;
+    }
     
     public void AddDamage(int damage)
     {
@@ -43,16 +56,13 @@ public class FlowerBossHealth : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            healthSlider.enabled = false;
             Die();
-           // MyGameManager.Instance.GameComplete();
-
         }
     }
     
     IEnumerator ShowDamageEffect()
     {
-        float startTime = Time.time;
+        float startTime = Time.deltaTime;
         float endTime = startTime + 0.5f;  
         float startValue = healthSlider.value;
         float targetValue = currentHealth;
@@ -81,8 +91,9 @@ public class FlowerBossHealth : MonoBehaviour
 
     void GameOver()
     {
+        if (gameOver) return;
         StopAllCoroutines();
-        healthSlider.enabled = false;
+        gameOver = true;
     }
     
     private void OnTriggerEnter(Collider other)
