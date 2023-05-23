@@ -201,58 +201,58 @@ public class TerrainGenerator : MonoBehaviour
     }
     
     void GenerateRiver()
-{
-    float z = 0f;
-    int segments = 20;
-    float curveStrength = 0.5f;
-
-    // Primera posición del río
-    float x = Random.Range(minX + 2 , maxX - 2); // Para que no pise los bordes
-    Vector3 currentPoint = new Vector3(x, 0f, z);
-    Instantiate(water, currentPoint, Quaternion.identity);
-
-    Vector3 previousPoint = currentPoint;
-    Vector3 direction = Vector3.forward;
-    int generatedSegments = 0; // Variable para contar los segmentos generados
-    int currentGrass = waterGrassList.Count; 
-
-    // Curva del rio
-    while (generatedSegments < (maxZ / segments))
     {
-        // Posición aleatoria a lo largo del eje z y x 
-        float nextZ = Random.Range(minZ, maxZ);
-        float nextx = Random.Range(minX, maxX);
-        Vector3 nextPoint = new Vector3(nextx, 0f, nextZ);
+        float z = 0f;
+        int segments = 20;
+        float curveStrength = 0.5f;
 
-        // Calcular el punto intermedio para curvar el río --> NO FUNCIONA
-        Vector3 midPoint = Vector3.Lerp(currentPoint, nextPoint, 0.5f);
-        float curveOffset = Random.Range(-curveStrength, curveStrength);
-        Vector3 curveVector = Vector3.Cross(direction, Vector3.up) * curveOffset;
-        midPoint += curveVector;
+        // Primera posición del río
+        float x = Random.Range(minX + 2 , maxX - 2); // Para que no pise los bordes
+        Vector3 currentPoint = new Vector3(x, 0f, z);
+        Instantiate(water, currentPoint, Quaternion.identity);
 
-        // Crear los segmentos del río
-        for (int i = 1; i <= segments; i++)
+        Vector3 previousPoint = currentPoint;
+        Vector3 direction = Vector3.forward;
+        int generatedSegments = 0; // Variable para contar los segmentos generados
+        int currentGrass = waterGrassList.Count; 
+
+        // Curva del rio
+        while (generatedSegments < (maxZ / segments))
         {
-            float t = (float)i / segments;
-            Vector3 point = Vector3.Lerp(previousPoint, midPoint, t);
-            point += (midPoint - currentPoint) * t;
-            point += (nextPoint - midPoint) * t;
-            point = new Vector3(point.x, point.y - 0.3f, point.z);
+            // Posición aleatoria a lo largo del eje z y x 
+            float nextZ = Random.Range(minZ, maxZ);
+            float nextx = Random.Range(minX, maxX);
+            Vector3 nextPoint = new Vector3(nextx, 0f, nextZ);
 
-            Instantiate(water, point, Quaternion.identity);
-      
-            Instantiate(waterGrassList[Random.Range(0, currentGrass)], new Vector3(point.x - 5f, point.y + 0.3f, point.z), Quaternion.identity);
-            Instantiate(waterGrassList[Random.Range(0, currentGrass)], new Vector3(point.x, point.y + 0.3f, point.z + 5f), Quaternion.identity);
+            // Calcular el punto intermedio para curvar el río --> NO FUNCIONA
+            Vector3 midPoint = Vector3.Lerp(currentPoint, nextPoint, 0.5f);
+            float curveOffset = Random.Range(-curveStrength, curveStrength);
+            Vector3 curveVector = Vector3.Cross(direction, Vector3.up) * curveOffset;
+            midPoint += curveVector;
+
+            // Crear los segmentos del río
+            for (int i = 1; i <= segments; i++)
+            {
+                float t = (float)i / segments;
+                Vector3 point = Vector3.Lerp(previousPoint, midPoint, t);
+                point += (midPoint - currentPoint) * t;
+                point += (nextPoint - midPoint) * t;
+                point = new Vector3(point.x, point.y - 0.3f, point.z);
+
+                Instantiate(water, point, Quaternion.identity);
+          
+                Instantiate(waterGrassList[Random.Range(0, currentGrass)], new Vector3(point.x - 5f, point.y + 0.3f, point.z), Quaternion.identity);
+                Instantiate(waterGrassList[Random.Range(0, currentGrass)], new Vector3(point.x, point.y + 0.3f, point.z + 5f), Quaternion.identity);
+            }
+
+            // Actualizar las variables para el siguiente segmento del río
+            previousPoint = midPoint - curveVector;
+            currentPoint = nextPoint;
+            direction = currentPoint - previousPoint;
+            z = nextZ;
+            generatedSegments++; // Incrementar el contador de segmentos generados
         }
-
-        // Actualizar las variables para el siguiente segmento del río
-        previousPoint = midPoint - curveVector;
-        currentPoint = nextPoint;
-        direction = currentPoint - previousPoint;
-        z = nextZ;
-        generatedSegments++; // Incrementar el contador de segmentos generados
     }
-}
     
     void GenerateGrass()
     {
@@ -278,52 +278,46 @@ public class TerrainGenerator : MonoBehaviour
     }
     
     void GeneratePlatforms()
-{
-    int platformCount = 5;
-
-    // Radio para comprobar si chocamos con algún otro objeto
-    float platformRadius = 5f;
-
-    // Altura actual del terreno
-    float currentY = Terrain.activeTerrain.SampleHeight(new Vector3(0, 0, 0)) + 0.5f;
-
-    float currentZ = Random.Range(minZ + limit, maxZ - limit);
-    float currentX = Random.Range(minX + limit, maxX - limit);
-
-    GameObject lastPlatform = null;
-
-    for (int i = 0; i < platformCount; i++)
     {
-        currentY += 0.5f;
-        currentZ += 6f;
+        int platformCount = 3;
 
-        float y = currentY;
-        float z = currentZ;
-        float x = currentX;
+        // Radio para comprobar si chocamos con algún otro objeto
+        float platformRadius = 5f;
 
-        // Compruebo colisiones
-        bool objectFound = false;
-        int maxAttempts = 5; // Número máximo de intentos antes de eliminar el objeto con el que choca
-        int attempts = 0;
+        // Altura actual del terreno
+        float currentY = Terrain.activeTerrain.SampleHeight(new Vector3(0, 0, 0)) + 0.5f;
 
-        do
+        float currentZ = Random.Range(minZ + limit, maxZ - limit);
+        float currentX = Random.Range(minX + limit, maxX - limit);
+
+        GameObject lastPlatform = null;
+
+        for (int i = 0; i < platformCount; i++)
         {
-            attempts++;
-            x = Random.Range(currentX - 2f, currentX + 2f);
+            currentY += 0.5f;
+            currentZ += 6f;
 
-            Collider[] hitColliders = Physics.OverlapSphere(new Vector3(x, currentY, currentZ), platformRadius);
+            float y = currentY;
+            float z = currentZ;
+            float x = currentX;
 
-            objectFound = false;
+            // Compruebo colisiones
+            bool objectFound = false;
+            int maxAttempts = 5; // Número máximo de intentos antes de eliminar el objeto con el que choca
+            int attempts = 0;
 
-            foreach (Collider hit in hitColliders)
+            do
             {
-                if (hit.CompareTag("Mountain"))
+                attempts++;
+                x = Random.Range(currentX - 2f, currentX + 2f);
+
+                Collider[] hitColliders = Physics.OverlapSphere(new Vector3(x, currentY, currentZ), platformRadius);
+
+                objectFound = false;
+
+                foreach (Collider hit in hitColliders)
                 {
-                    objectFound = true;
-                    break; // Detener la generación de plataformas si choca contra una montaña
-                }
-                else if (hit.CompareTag("Tree"))
-                {
+                    if (!hit.CompareTag("Tree") && !hit.CompareTag("Mountain")) continue;
                     objectFound = true;
 
                     if (attempts >= maxAttempts)
@@ -332,22 +326,21 @@ public class TerrainGenerator : MonoBehaviour
                         Destroy(hit.gameObject);
                     }
                 }
-            }
-        } while (objectFound && attempts < maxAttempts);
+            } while (objectFound && attempts < maxAttempts);
 
-        currentX = x;
+            currentX = x;
 
-        GameObject newPlatform = Instantiate(Plattform, new Vector3(x, y, z), Quaternion.identity) as GameObject;
-        lastPlatform = newPlatform;
+            GameObject newPlatform = Instantiate(Plattform, new Vector3(x, y, z), Quaternion.identity) as GameObject;
+            lastPlatform = newPlatform;
+        }
+
+        if (lastPlatform != null)
+        {
+            Vector3 gemPosition = new Vector3(lastPlatform.transform.position.x, lastPlatform.transform.position.y + 3f,
+                lastPlatform.transform.position.z);
+            Instantiate(gemPrefab, gemPosition, Quaternion.identity);
+        }
     }
-
-    if (lastPlatform != null)
-    {
-        Vector3 gemPosition = new Vector3(lastPlatform.transform.position.x, lastPlatform.transform.position.y + 3f,
-            lastPlatform.transform.position.z);
-        Instantiate(gemPrefab, gemPosition, Quaternion.identity);
-    }
-}
 
     #endregion
 }
