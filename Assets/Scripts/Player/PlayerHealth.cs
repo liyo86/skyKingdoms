@@ -6,9 +6,6 @@ using UnityEngine.UI;
 public class PlayerHealth : MonoBehaviour
 {
     public static PlayerHealth Instance;
-
-    [Tooltip("Slider de la vida del jugador.")]
-    [SerializeField] private Slider healthSlider;
     [SerializeField] private Image HP;
     [SerializeField] private Color normalColor;
     [SerializeField] private Color damageColor;
@@ -56,20 +53,15 @@ public class PlayerHealth : MonoBehaviour
         while (Time.time < endTime)
         {
             float t = (Time.time - startTime) / (endTime - startTime);
-            healthSlider.value = Mathf.Lerp(startValue, targetValue, t);
             HP.fillAmount = Mathf.Lerp(startValue, targetValue, t);
             yield return null;
         }
-
-        //healthSlider.image.color = normalColor;
     }
 
     public void Reset()
     {
         maxHealth = 100;
         currentHealth = maxHealth;
-        healthSlider.maxValue = maxHealth;
-        healthSlider.value = currentHealth;
         HP.fillAmount = 1f;
     }
 }

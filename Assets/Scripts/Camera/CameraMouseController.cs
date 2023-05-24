@@ -11,7 +11,7 @@ public class CameraMouseController : MonoBehaviour
     private InputAction rotateAction;
     public InputActionAsset inputActions;
     
-    public float smoothTime = 0.2f;  // Duración del suavizado
+    public float smoothTime = 1f;  // Duración del suavizado
     private float smoothVelocityX;  // Velocidad suavizada en el eje X
     private float smoothVelocityY;  // Velocidad suavizada en el eje Y
 
@@ -45,7 +45,8 @@ public class CameraMouseController : MonoBehaviour
         float mouseY = rotationInput.y;
 
         // Aplicar la interpolación suave
-        float smoothX = Mathf.SmoothDamp(freeLookCamera.m_XAxis.Value, freeLookCamera.m_XAxis.Value + mouseX, ref smoothVelocityX, smoothTime);
+        float smoothX = Mathf.SmoothDamp(freeLookCamera.m_XAxis.Value, mouseX, ref smoothVelocityX, smoothTime);
+
         float smoothY = Mathf.SmoothDamp(freeLookCamera.m_YAxis.Value, freeLookCamera.m_YAxis.Value + mouseY, ref smoothVelocityY, smoothTime);
 
         freeLookCamera.m_XAxis.Value = smoothX;
