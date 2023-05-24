@@ -623,7 +623,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2625350962175231667
 RectTransform:
   m_ObjectHideFlags: 0
@@ -721,10 +721,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808ac47b013ed495baab1e5ab4a81ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActions: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 61fcc028162a44830b980c6db5abd667, type: 3}
   sceneManager: {fileID: 0}
-  selectList: []
-  menuCanvas: {fileID: 0}
+  selectList:
+  - {fileID: 2625350962018112028}
+  - {fileID: 2625350961653209054}
+  menuCanvas: {fileID: 2625350962175231679}
 --- !u!1 &2625350962188393349
 GameObject:
   m_ObjectHideFlags: 0

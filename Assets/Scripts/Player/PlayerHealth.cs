@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
 
     [Tooltip("Slider de la vida del jugador.")]
     [SerializeField] private Slider healthSlider;
+    [SerializeField] private Image HP;
     [SerializeField] private Color normalColor;
     [SerializeField] private Color damageColor;
     
@@ -33,9 +34,7 @@ public class PlayerHealth : MonoBehaviour
     public void AddDamage(int damage)
     {
         currentHealth -= damage;
-        
-        Debug.Log(currentHealth);
-        
+
         StartCoroutine(ShowDamageEffect());
 
         if (currentHealth <= 0)
@@ -51,13 +50,14 @@ public class PlayerHealth : MonoBehaviour
 
         float startTime = Time.time;
         float endTime = startTime + 0.5f;  
-        float startValue = healthSlider.value;
-        float targetValue = currentHealth;
+        float startValue = HP.fillAmount;
+        float targetValue = currentHealth / 100f;
 
         while (Time.time < endTime)
         {
             float t = (Time.time - startTime) / (endTime - startTime);
             healthSlider.value = Mathf.Lerp(startValue, targetValue, t);
+            HP.fillAmount = Mathf.Lerp(startValue, targetValue, t);
             yield return null;
         }
 
@@ -70,5 +70,6 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = maxHealth;
         healthSlider.maxValue = maxHealth;
         healthSlider.value = currentHealth;
+        HP.fillAmount = 1f;
     }
 }

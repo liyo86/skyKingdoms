@@ -84,18 +84,22 @@ public class MyAudioManager : MonoBehaviour
                 break;
             case nameof(dayAmbient):
                 sourceMusic.clip = dayAmbient;
+                sourceMusic.loop = true;
                 sourceMusic.Play();
                 break;
             case nameof(flight):
                 sourceMusic.clip = flight;
+                sourceMusic.loop = true;
                 sourceMusic.Play();
                 break;
             case nameof(boss):
                 sourceMusic.clip = boss;
+                sourceMusic.loop = true;
                 sourceMusic.Play();
                 break;
             case nameof(dungeon):
                 sourceMusic.clip = dungeon;
+                sourceMusic.loop = true;
                 sourceMusic.Play();
                 break;
             default:
