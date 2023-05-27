@@ -27,7 +27,7 @@ public static class Text_Story_0
                 text = "GOBLIN:\nJa, ja, ja... .";
                 break;
             case 6:
-                text = "PRINCESA:\n¡Que alguien me ayude a buscar las gemas!";
+                text = "PRINCESA:\n¡No Sueltame! ¡Socorrooo!";
                 break;
         }
         

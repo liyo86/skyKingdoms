@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using Generators;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public static EnemySpawner instance;
+    public static EnemySpawner Instance;
     
     public float treeThreshold;
     public float waterThreshold = 0.3f;
@@ -17,7 +18,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     public void CanStart ()
@@ -66,6 +67,4 @@ public class EnemySpawner : MonoBehaviour
             }
         }
     }
-
-    
 }

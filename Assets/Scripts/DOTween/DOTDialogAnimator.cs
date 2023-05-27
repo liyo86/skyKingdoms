@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
@@ -5,17 +6,18 @@ using UnityEngine.UI;
 public class DOTDialogAnimator : MonoBehaviour
 {
     [SerializeField]
-    private Image dialogImage;
+    private GameObject dialogImageObj;
     private float fadeInTime = 1f;
+    private Image dialogImage;
 
-    private void Start()
+    private void Awake()
     {
-        dialogImage.gameObject.SetActive(false);
+        dialogImage = dialogImageObj.GetComponent<Image>();
     }
 
     public void ShowDialogBox()
     {
-        dialogImage.gameObject.SetActive(true);
+        dialogImageObj.SetActive(true);
         dialogImage.color = new Color(dialogImage.color.r, dialogImage.color.g, dialogImage.color.b, 0f);
         dialogImage.DOFade(1f, fadeInTime);
     }
@@ -23,7 +25,7 @@ public class DOTDialogAnimator : MonoBehaviour
     public void HideDialogBox()
     {
         dialogImage.DOFade(0f, fadeInTime).OnComplete(() => {
-            dialogImage.gameObject.SetActive(false);
+            dialogImageObj.SetActive(false);
         });
     }
 }

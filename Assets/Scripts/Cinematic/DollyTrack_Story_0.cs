@@ -72,9 +72,9 @@ public class DollyTrack_Story_0 : MonoBehaviour
         
         MyDialogueManager.Instance.NextText(); // ALTO
         Princess.SetActive(true);
-        dollyCartSeq2.m_Speed = 3;
-        yield return new WaitForSeconds(1);
+        dollyCartSeq2.m_Speed = 2;
         yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        yield return new WaitForSeconds(1);
         
         Goblin.DoRotate();
         yield return new WaitForSeconds(1);
@@ -82,16 +82,20 @@ public class DollyTrack_Story_0 : MonoBehaviour
         finalCam.enabled = true;
         MyDialogueManager.Instance.NextText(); // Sera mejor
         yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        yield return new WaitForSeconds(1);
         
         MyDialogueManager.Instance.NextText();
         yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        yield return new WaitForSeconds(1);
         
         BlackCanvas.SetActive(true);
         MyDialogueManager.Instance.NextText();
         yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        yield return new WaitForSeconds(1);
         
         MyDialogueManager.Instance.NextText(); // Ultimo dialogo
         yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        yield return new WaitForSeconds(1);
         
         MyDialogueManager.Instance.HideDialogBox();
         yield return new WaitForSeconds(1);

@@ -1,306 +1,435 @@
 using System.Collections;
+using DG.Tweening;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class BoyController : MonoBehaviour
+namespace Player
 {
-    #region INSPECTOR VARIABLES
-    [Header("CONFIGURATION\n")]
-    [Tooltip("Velocidad del personaje.")]
-    [SerializeField]
-    private float speed;
-    
-    [Tooltip("Rotación del personaje.")]
-    [SerializeField]
-    private float rotationSpeed;
-    
-    [Tooltip("Fuerza del salto.")]
-    [SerializeField]
-    private float jumpHeight;
-    
-    [Tooltip("Máscara de capa utilizada para verificar si el personaje está en el suelo.")]
-    [SerializeField]
-    private LayerMask groundLayerMask;
-    
-    [Header("Jump Landing")]
-    [Tooltip("Distancia máxima para considerar que el personaje está en el suelo.")]
-    [SerializeField]
-    private float groundCheckDistance = 0.1f;
-    
-    [Tooltip("Prefab del hechizo de fuego.")]
-    [SerializeField]
-    private GameObject spellPrefab;
-    
-    [Tooltip("Prefab del hechizo de defensa.")]
-    [SerializeField]
-    private GameObject defensePrefab;
-    
-    [Tooltip("Transform para instanciar los ataques.")]
-    [SerializeField]
-    private Transform spellSpawn;
-    
-    public LoadScreenManager sceneManager;
-    #endregion
-
-    #region REFERENCES
-    private Rigidbody rb;
-    private Animator animator;
-    private Vector3 movement;
-
-    // New Input System
-    private InputAction movementAction;
-    private InputAction shootAction;
-    private InputAction jumpAction;
-    private InputAction defenseAction;
-    public InputActionAsset inputActions;
-    #endregion
-    
-    #region PRIVATE VARIABLES
-    private bool dragonCollision;
-    private bool _damaged;
-    private bool isJumping;
-    private bool isGrounded = true;
-    private bool isDefending;
-
-    #endregion
-
-    #region PUBLIC VARIABLES
-    public static BoyController Instance;
-    public bool CanMove { get; set; } = true;
-
-    public bool HasGemBlue = false; //TODO no me gusta aqui
-
-    public bool IsDefending => isDefending;
-
-    #endregion
-    
-    #region UNITY METHODS
-    private void Awake()
+    public class BoyController : MonoBehaviour
     {
-        Instance = this;
-        
-        rb = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
-        movementAction = inputActions.FindActionMap("Player").FindAction("Movement");
-        shootAction = inputActions.FindActionMap("Player").FindAction("Shoot");
-        jumpAction = inputActions.FindActionMap("Player").FindAction("Jump");
-        defenseAction = inputActions.FindActionMap("Player").FindAction("Defense");
-    }
+        #region INSPECTOR VARIABLES
+        [Header("CONFIGURATION\n")]
+        [Tooltip("Velocidad del personaje.")]
+        [SerializeField]
+        private float speed;
+    
+        [Tooltip("Rotación del personaje.")]
+        [SerializeField]
+        private float rotationSpeed;
+    
+        [Tooltip("Fuerza del salto.")]
+        [SerializeField]
+        private float jumpHeight;
+    
+        [Tooltip("Máscara de capa utilizada para verificar si el personaje está en el suelo.")]
+        [SerializeField]
+        private LayerMask groundLayerMask;
+    
+        [Header("Jump Landing")]
+        [Tooltip("Distancia máxima para considerar que el personaje está en el suelo.")]
+        [SerializeField]
+        private float groundCheckDistance = 0.1f;
+    
+        [Tooltip("Prefab del hechizo de fuego.")]
+        [SerializeField]
+        private GameObject spellPrefab;
+    
+        [Tooltip("Prefab del hechizo de defensa.")]
+        [SerializeField]
+        private GameObject defensePrefab;
+    
+        [Tooltip("Prefab del hechizo especial.")]
+        [SerializeField]
+        private GameObject specialAttackPrefab;
+    
+        [Tooltip("Transform para instanciar los ataques.")]
+        [SerializeField]
+        private Transform spellSpawn;
+    
+        [Tooltip("Transform para instanciar los ataques especiales.")]
+        [SerializeField]
+        private Transform specialSpellSpawn;
+    
+        public LoadScreenManager sceneManager;
+        #endregion
 
-    private void OnEnable()
-    {
-        movementAction.performed += OnMovementPerformed;
-        movementAction.canceled += OnMovementCanceled;
-        movementAction.Enable();
-        
-        shootAction.performed += OnShootPerformed;
-        shootAction.Enable();
+        #region REFERENCES
+        private Rigidbody rb;
+        private Animator animator;
+        private Vector3 movement;
 
-        jumpAction.performed += OnJumpPerformed;
-        jumpAction.Enable();
+        // New Input System
+        private InputAction movementAction;
+        private InputAction shootAction;
+        private InputAction jumpAction;
+        private InputAction defenseAction;    
+        private InputAction specialAttackAction;
+        public InputActionAsset inputActions;
+        #endregion
+    
+        #region PRIVATE VARIABLES
+        private bool dragonCollision;
+        private bool _damaged;
+        private bool isJumping;
+        private bool isGrounded = true;
+        private bool isDefending;
+        public float loadTime = 1f;
+        public float maxScale = 1f;
+        private GameObject currentSpecialAttack;
+        private Rigidbody rbCurrentSpecialAttack;
+        private bool r2Triggered;
+        private static readonly int Specialattack = Animator.StringToHash("specialattack");
+        private static readonly int Releasespecial = Animator.StringToHash("releasespecial");
+        #endregion
 
-        defenseAction.performed += OnDefensePerformed;
-        defenseAction.Enable();
-    }
+        #region PUBLIC VARIABLES
+        public static BoyController Instance;
 
-    private void OnDisable()
-    {
-        movementAction.performed -= OnMovementPerformed;
-        movementAction.canceled -= OnMovementCanceled;
-        movementAction.Disable();
-        
-        shootAction.performed -= OnShootPerformed;
-        shootAction.Disable();
-        
-        jumpAction.performed -= OnJumpPerformed;
-        jumpAction.Disable();
-        
-        defenseAction.performed -= OnDefensePerformed;
-        defenseAction.Disable();
-    }
+        public GameObject Dragon;
+        public bool CanMove { get; set; } = false;
 
-    private void Update()
-    {
-        CheckGrounded();
-    }
+        public bool HasGemBlue = false; //TODO no me gusta aqui
 
-    private void FixedUpdate()
-    {
-        //if (!CanMove) return;
-        FixedControls();   
-    }
+        public bool IsDefending => isDefending;
 
-    void FixedControls()
-    {
-        // Movimiento del personaje
-        Vector3 direction = new Vector3(movement.x, 0, movement.y);
-
-        // Calcula la dirección del movimiento relativa a la cámara
-        Vector3 relativeDirection = Camera.main.transform.TransformDirection(direction);
-        relativeDirection.y = 0;
-        relativeDirection.Normalize();
-
-        // Aplica la velocidad al movimiento
-        Vector3 move = relativeDirection * speed * Time.deltaTime;
-        rb.MovePosition(rb.position + move);
-
-        // Orienta el personaje en la dirección del movimiento
-        if (direction != Vector3.zero)
+        #endregion
+    
+        #region UNITY METHODS
+        private void Awake()
         {
-            Quaternion targetRotation = Quaternion.LookRotation(relativeDirection, Vector3.up);
-            rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            Instance = this;
+        
+            rb = GetComponent<Rigidbody>();
+            animator = GetComponent<Animator>();
+            movementAction = inputActions.FindActionMap("Player").FindAction("Movement");
+            shootAction = inputActions.FindActionMap("Player").FindAction("Shoot");
+            jumpAction = inputActions.FindActionMap("Player").FindAction("Jump");
+            defenseAction = inputActions.FindActionMap("Player").FindAction("Defense");
+            specialAttackAction = inputActions.FindActionMap("Player").FindAction("Special Attack");
         }
-    }
 
-    private void LateUpdate()
-    {
-        animator.SetFloat("speed", movement.magnitude);
-        animator.SetBool("walk", movement.magnitude > 0f);
-        animator.SetBool("jump", isJumping);
-        animator.SetBool("land", isGrounded);
-    }
-    
-    #endregion
-
-    #region SHOOT
-    private void OnShootPerformed(InputAction.CallbackContext context)
-    {
-        if (isGrounded)
+        private void OnEnable()
         {
-            CanMove = false;
+            movementAction.performed += OnMovementPerformed;
+            movementAction.canceled += OnMovementCanceled;
+            movementAction.Enable();
+        
+            shootAction.performed += OnShootPerformed;
+            shootAction.Enable();
 
-            movement = Vector2.zero;
-            animator.SetTrigger("shoot");
-            StartCoroutine(nameof(Shoot));
+            jumpAction.performed += OnJumpPerformed;
+            jumpAction.Enable();
+
+            defenseAction.performed += OnDefensePerformed;
+            defenseAction.Enable();
+        
+            specialAttackAction.performed += OnR2Hold;
+            specialAttackAction.canceled += OnR2Hold;
+            specialAttackAction.Enable();
         }
-    }
 
-    IEnumerator Shoot()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        MyAudioManager.Instance.PlaySfx("fireVoice");
-
-        Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
-
-        CanMove = true;
-    }
-    
-    #endregion
-
-    #region MOVEMENT
-    private void OnMovementPerformed(InputAction.CallbackContext context)
-    {
-        movement = context.ReadValue<Vector2>();
-    }
-
-    private void OnMovementCanceled(InputAction.CallbackContext context)
-    {
-        movement = Vector2.zero;
-    }
-
-    #endregion
-
-    #region JUMP
-    private void OnJumpPerformed(InputAction.CallbackContext context)
-    {
-        if (!isJumping && isGrounded)
+        private void OnDisable()
         {
-            isJumping = true;
-            isGrounded = false;
-            rb.velocity = new Vector3(rb.velocity.x, Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), rb.velocity.z);
+            movementAction.performed -= OnMovementPerformed;
+            movementAction.canceled -= OnMovementCanceled;
+            movementAction.Disable();
+        
+            shootAction.performed -= OnShootPerformed;
+            shootAction.Disable();
+        
+            jumpAction.performed -= OnJumpPerformed;
+            jumpAction.Disable();
+        
+            defenseAction.performed -= OnDefensePerformed;
+            defenseAction.Disable();
+        
+            specialAttackAction.performed -= OnR2Hold;
+            specialAttackAction.canceled -= OnR2Hold;
+            specialAttackAction.Disable();
         }
-    }
-    
-    private void CheckGrounded()
-    {
-        RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, groundCheckDistance, groundLayerMask))
+        private void Update()
         {
-            isGrounded = true;
-            CanMove = false;
-        }     
-
-        if (rb.velocity.y != 0f && !isGrounded)
-        {
-            isJumping = true;
-        } else if (rb.velocity.y == 0f && isGrounded)
-        {
-            isJumping = false;
-            CanMove = true;
+            if (!CanMove) return;
+            CheckGrounded();
         }
-    }
-    #endregion
-    
-    #region DEFENSE
 
-    private void OnDefensePerformed(InputAction.CallbackContext context)
-    {
-        CanMove = false;
-
-        isDefending = true;
-        MyAudioManager.Instance.PlaySfx("defenseVoice");
-        defensePrefab.SetActive(true);
-        StartCoroutine(DefenseActive());
-    }
-
-    IEnumerator DefenseActive()
-    {
-        yield return new WaitForSeconds(3f);
-        defensePrefab.SetActive(false);
-        isDefending = false;
-
-        CanMove = true;
-    }
-    
-    #endregion
-    
-    // SACAR FUERA DE ESTE SCRIPT
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Dragon") && !dragonCollision)
+        private void FixedUpdate()
         {
-            dragonCollision = true;
-            
-            if (HasGemBlue)
+            if (!CanMove) return;
+            FixedControls();   
+        }
+
+        private void LateUpdate()
+        {
+            if (!CanMove) return;
+            animator.SetFloat("speed", movement.magnitude);
+            animator.SetBool("walk", movement.magnitude > 0f);
+            animator.SetBool("jump", isJumping);
+            animator.SetBool("land", isGrounded);
+        }
+        
+        void FixedControls()
+        {
+            // Movimiento del personaje
+            Vector3 direction = new Vector3(movement.x, 0, movement.y);
+
+            // Calcula la dirección del movimiento relativa a la cámara
+            Vector3 relativeDirection = Camera.main.transform.TransformDirection(direction);
+            relativeDirection.y = 0;
+            relativeDirection.Normalize();
+
+            // MOVIMIENTO
+            Vector3 move = relativeDirection * speed * Time.deltaTime;
+            rb.MovePosition(rb.position + move);
+
+            // ROTACION
+            if (direction != Vector3.zero)
             {
-                sceneManager.LoadScene();
+                Quaternion targetRotation = Quaternion.LookRotation(relativeDirection, Vector3.up);
+                rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+                if (r2Triggered && currentSpecialAttack != null)
+                    rbCurrentSpecialAttack.rotation = Quaternion.Slerp(rbCurrentSpecialAttack.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
             else
-            { 
-                MyDialogueManager.Instance.TextLevel1();
+            {
+                rb.rotation = Quaternion.Slerp(rb.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
+
+                if (r2Triggered && currentSpecialAttack != null)
+                    rbCurrentSpecialAttack.rotation = Quaternion.Slerp(rbCurrentSpecialAttack.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
+            }
+
+            // MOVIMIENTO DEL ATAQUE ESPECIAL
+            if (r2Triggered && currentSpecialAttack != null)
+            {
+                rbCurrentSpecialAttack.MovePosition(specialSpellSpawn.position);
+                rbCurrentSpecialAttack.MoveRotation(rbCurrentSpecialAttack.rotation * Quaternion.Euler(0f, rotationSpeed * Time.deltaTime, 0f));
             }
         }
-        else if (other.CompareTag("Enemy") && !_damaged && !isDefending)
+
+    
+        #endregion
+
+        #region SHOOT
+        private void OnShootPerformed(InputAction.CallbackContext context)
         {
-            _damaged = true;
-            PlayerHealth.Instance.AddDamage(10);
-            StartCoroutine(Damaged(other.transform.position));
-            animator.SetTrigger("damage");
-        } else if (other.CompareTag("BossAttack1") && !_damaged && !isDefending)
+            if (!CanMove) return;
+            
+            if (isGrounded)
+            {
+                CanMove = false;
+
+                movement = Vector2.zero;
+                animator.SetTrigger("shoot");
+                StartCoroutine(nameof(Shoot));
+            }
+        }
+
+        IEnumerator Shoot()
         {
-            _damaged = true;
-            PlayerHealth.Instance.AddDamage(25);
-            StartCoroutine(Damaged(other.transform.position));
-            animator.SetTrigger("damage");
+            yield return new WaitForSeconds(0.5f);
+
+            MyAudioManager.Instance.PlaySfx("fireVoice");
+
+            Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
+
+            CanMove = true;
+        }
+    
+        #endregion
+
+        #region MOVEMENT
+        private void OnMovementPerformed(InputAction.CallbackContext context)
+        {
+            movement = context.ReadValue<Vector2>();
+        }
+
+        private void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            movement = Vector2.zero;
+        }
+
+        #endregion
+
+        #region JUMP
+        private void OnJumpPerformed(InputAction.CallbackContext context)
+        {
+            if (!CanMove) return;
+            
+            if (!isJumping && isGrounded)
+            {
+                isJumping = true;
+                isGrounded = false;
+
+                rb.AddForce(Vector3.up, ForceMode.Impulse);
+                
+                rb.velocity = new Vector3(rb.velocity.x, Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), rb.velocity.z);
+            }
+        }
+    
+        private void CheckGrounded()
+        {
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, groundCheckDistance, groundLayerMask))
+            {
+                isGrounded = true;
+            }     
+
+            if (rb.velocity.y != 0f && !isGrounded)
+            {
+                isJumping = true;
+            } else if (rb.velocity.y == 0f && isGrounded)
+            {
+                isJumping = false;
+            }
+        }
+
+        // Controlado por evento de animator
+        private IEnumerator WaitAndWalk()
+        {
+            CanMove = false;
+
+            yield return new WaitForSeconds(0.5f);
+
+            CanMove = true;
+        }
+        #endregion
+    
+        #region DEFENSE
+
+        private void OnDefensePerformed(InputAction.CallbackContext context)
+        {
+            if (!CanMove) return;
+            
+            CanMove = false;
+
+            isDefending = true;
+            MyAudioManager.Instance.PlaySfx("defenseVoice");
+            defensePrefab.SetActive(true);
+            StartCoroutine(DefenseActive());
+        }
+
+        private IEnumerator DefenseActive()
+        {
+            yield return new WaitForSeconds(3f);
+            defensePrefab.SetActive(false);
+            isDefending = false;
+
+            CanMove = true;
+        }
+    
+        #endregion
+    
+        #region SPECIAL ATTACK
+
+        private void OnR2Hold(InputAction.CallbackContext context)
+        {
+            if (!CanMove) return;
+            
+            if (context.performed)
+            {
+                if (currentSpecialAttack != null) return;
+                r2Triggered = true;
+                animator.SetTrigger(Specialattack);
+                StartCoroutine(LoadSpecialAttack());
+            }
+            else if (context.canceled)
+            {
+                if (currentSpecialAttack == null) return;
+                r2Triggered = false;
+                animator.SetTrigger(Releasespecial);
+                StartCoroutine(nameof(LaunchSpecialAttack));
+            }
+        }
+
+        private IEnumerator LaunchSpecialAttack()
+        {
+            // Lanzar el ataque especial en la dirección hacia la que mira el jugador
+            Vector3 attackDirection = transform.position;
+            rbCurrentSpecialAttack.velocity = rbCurrentSpecialAttack.transform.forward * 10f;
+
+            yield return new WaitForSeconds(2f);
+
+            // Eliminar el ataque especial después de cierto tiempo
+            Destroy(currentSpecialAttack.gameObject);
+            currentSpecialAttack = null;
+        }
+
+
+        private IEnumerator LoadSpecialAttack()
+        {
+            var elapsedTime = 0f;
+            var initialScale = new Vector3(0.1f, 0.1f, 0.1f);
+            var targetScale = new Vector3(1, 1, 1);
+
+            currentSpecialAttack = Instantiate(specialAttackPrefab, specialSpellSpawn.position, Quaternion.identity) as GameObject;
+            rbCurrentSpecialAttack = currentSpecialAttack.GetComponent<Rigidbody>();
+
+            currentSpecialAttack.transform.LookAt(transform);
+
+            while (elapsedTime < loadTime)
+            {
+                if (currentSpecialAttack != null)
+                {
+                    float t = elapsedTime / loadTime;
+                    currentSpecialAttack.transform.localScale = Vector3.Lerp(initialScale, targetScale, t);
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+            }
+        }
+
+        #endregion
+    
+        // SACAR FUERA DE ESTE SCRIPT
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Dragon") && !dragonCollision)
+            {
+                dragonCollision = true;
+            
+                if (HasGemBlue)
+                    sceneManager.LoadScene();
+            }
+            else if (other.CompareTag("Enemy") && !_damaged && !isDefending)
+            {
+                _damaged = true;
+                PlayerHealth.Instance.AddDamage(10);
+                StartCoroutine(Damaged(other.transform.position));
+                animator.SetTrigger("damage");
+            } else if (other.CompareTag("BossAttack1") && !_damaged && !isDefending)
+            {
+                _damaged = true;
+                PlayerHealth.Instance.AddDamage(25);
+                StartCoroutine(Damaged(other.transform.position));
+                animator.SetTrigger("damage");
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            _damaged = false;
+            dragonCollision = false;
+        }
+
+        IEnumerator Damaged(Vector3 enemyPos)
+        {
+            // Recoil
+            Vector3 recoilDirection = (transform.position - enemyPos).normalized;
+            rb.AddForce(recoilDirection * 20f, ForceMode.Impulse);
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        public void ShowDragon(Vector3 position)
+        {
+            Dragon.GetComponent<Transform>().position = position;
+            Dragon.SetActive(true);
+            Dragon.transform.LookAt(transform);
+            Dragon.transform.DOMoveY(transform.position.y + 1, 2).SetEase(Ease.Linear).Play();
         }
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        _damaged = false;
-        dragonCollision = false;
-    }
-
-    IEnumerator Damaged(Vector3 enemyPos)
-    {
-        // Recoil
-        Vector3 recoilDirection = (transform.position - enemyPos).normalized;
-        rb.AddForce(recoilDirection * 20f, ForceMode.Impulse);
-
-        yield return new WaitForSeconds(1f);
-    }
-
 }

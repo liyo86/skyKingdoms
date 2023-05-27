@@ -28,7 +28,6 @@ namespace Managers
         private bool isSubmitBtn;
         private bool canStart;
         private bool canCheckVisibility;
-        
         private const string TEXT_STORY = "Text_Story";
         private const string TEXT = "Text";
         private const string MAX_STEPS = "GetMaxStep";
@@ -53,7 +52,7 @@ namespace Managers
                 CheckShowButton();   
             } else if (canStart && !PlayerControl)
             {
-                CheckDialogVisibility();
+                //CheckDialogVisibility();
             }
         }
 
@@ -74,7 +73,6 @@ namespace Managers
                 
                 if (storyMethod != null)
                 {
-                    MyGameManager.Instance.PausePlayerMovement();
                     dialogAnimator.ShowDialogBox();
                     canStart = true;
                     NewDialogText();
@@ -124,20 +122,20 @@ namespace Managers
             if (dialogManager.Printer_Text.text.Length > currentText.Length - 1 && canCheckVisibility)
             {
                 canCheckVisibility = false;
-                //dialogAnimator.HideDialogBox();
-                MyGameManager.Instance.ResumePlayerMovement();
+                dialogAnimator.HideDialogBox();
             }
         }
 
         public bool CanContinue()
         {
-            return dialogManager.Printer_Text.text.Length > currentText.Length - 1;
+            return dialogManager.Printer_Text.text.Length >= currentText.Length;
         }
 
         // No hay más texto que mostrar
         void StoryEnds()
         {
             dialogAnimator.HideDialogBox();
+            MyGameManager.Instance.ResumePlayerMovement();
         }
         
         // Player Input Action Submit
@@ -163,13 +161,12 @@ namespace Managers
             }
         }
         
-        
         // Carga de textos en Niveles
-        public void TextLevel1()
+        public void TextLevel(string level)
         {
             step = 0;
             
-            Type storyType = Type.GetType(TEXT + "_Level1");
+            Type storyType = Type.GetType(TEXT + "_" + level);
  
             if (storyType != null)
             {
@@ -184,7 +181,6 @@ namespace Managers
                 
                 if (storyMethod != null)
                 {
-                    MyGameManager.Instance.PausePlayerMovement();
                     dialogAnimator.ShowDialogBox();
                     canStart = true;
                     NewDialogText();

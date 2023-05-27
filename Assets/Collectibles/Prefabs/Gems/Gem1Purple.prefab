@@ -101,7 +101,7 @@ MonoBehaviour:
   CollectibleType: 2
   rotate: 1
   rotationSpeed: 10
-  collectSound: {fileID: 0}
+  collectSound: {fileID: 8300000, guid: aa348f776c7354f36917fef10c6b48d1, type: 3}
   collectEffect: {fileID: 1702657300312902, guid: a45c51da10cf1a84abc6a99c06951e3f, type: 3}
 --- !u!82 &82218280886373960
 AudioSource:

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Player;
 using UnityEngine;
 
 public class Phase2 : FSMBoss

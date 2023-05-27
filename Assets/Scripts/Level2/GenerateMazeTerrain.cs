@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Generators;
 using UnityEngine;
 
 public class GenerateMazeTerrain : MonoBehaviour

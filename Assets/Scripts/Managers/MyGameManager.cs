@@ -1,9 +1,12 @@
 using System.Collections;
+using Managers;
+using Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MyGameManager : MonoBehaviour
 {
+    #region VARIABLES
     public static MyGameManager Instance;
     
     public GameObject GameOverCanvas;
@@ -11,7 +14,8 @@ public class MyGameManager : MonoBehaviour
     public GameObject menuGameOver;
     public Animator playerCanvasAnimator;
     public bool gameOver;
-
+    #endregion
+    
     #region UNITY METHODS
     private void Awake()
     {
@@ -27,11 +31,12 @@ public class MyGameManager : MonoBehaviour
 
     void Start()
     {
-        InitMusic();
+        Init();
     }
     #endregion
     
-    void InitMusic()
+    #region INIT CONFIGURATION
+    void Init()
     {
         string sceneName = SceneManager.GetActiveScene().name;
 
@@ -42,9 +47,11 @@ public class MyGameManager : MonoBehaviour
                 break;
             case "Level1":
                 MyAudioManager.Instance.PlayMusic("dayAmbient");
+                MyLevelManager.Instance.Level1();
                 break;
             case "Level2":
                 MyAudioManager.Instance.PlayMusic("dungeon");
+                MyLevelManager.Instance.Level2();
                 break;
             case "Flight":
                 MyAudioManager.Instance.PlayMusic("flight");
@@ -60,22 +67,25 @@ public class MyGameManager : MonoBehaviour
                 break;
         }
     }
-
-    public void CollectGem(SimpleCollectibleScript.CollectibleTypes gemType)
+    #endregion
+    
+    #region COLLECTIBLES
+    public void CollectGem(Collectible.CollectibleTypes gemType)
     {
         switch (gemType)
         {
-            case SimpleCollectibleScript.CollectibleTypes.GemBlue:
+            case Collectible.CollectibleTypes.GemBlue:
                 BoyController.Instance.HasGemBlue = true; //TODO cambiar por un manager del nivel
                 break;
-            case SimpleCollectibleScript.CollectibleTypes.GemPurple:
+            case Collectible.CollectibleTypes.GemPurple:
                 FlightLevel.Instance.LevelComplete();
                 break;
-            case SimpleCollectibleScript.CollectibleTypes.GemRed:
+            case Collectible.CollectibleTypes.GemRed:
                 MazeGenerator.Instance.LevelComplete();
                 break;
         }
     }
+    #endregion
     
     #region GAME OVER
     public void GameOver()
@@ -103,7 +113,6 @@ public class MyGameManager : MonoBehaviour
 
     public void RestartLevel()
     {
-        // TODO control de vidas?
         playerCanvasAnimator.SetTrigger("continue");
     }
     
