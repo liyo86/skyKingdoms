@@ -58,6 +58,7 @@ public class MyGameManager : MonoBehaviour
                 break;
             case "BossBattle":
                 MyAudioManager.Instance.PlayMusic("boss");
+                MyLevelManager.Instance.Level3(); //TODO cambiar nombre
                 break;
             case "Story_0":
                 MyAudioManager.Instance.PlayMusic("dungeon");
@@ -75,13 +76,16 @@ public class MyGameManager : MonoBehaviour
         switch (gemType)
         {
             case Collectible.CollectibleTypes.GemBlue:
-                BoyController.Instance.HasGemBlue = true; //TODO cambiar por un manager del nivel
+                Debug.Log("Azul conseguida");
                 break;
             case Collectible.CollectibleTypes.GemPurple:
                 FlightLevel.Instance.LevelComplete();
                 break;
             case Collectible.CollectibleTypes.GemRed:
                 MazeGenerator.Instance.LevelComplete();
+                break;
+            case Collectible.CollectibleTypes.GemGreen:
+                Debug.Log("Verde conseguida");
                 break;
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,10 +22,14 @@ public class FlowerBossHealth : MonoBehaviour
     }
     
     public static FlowerBossHealth Instance;
-    
-    void Start()
+
+    private void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
         Init();
     }
 

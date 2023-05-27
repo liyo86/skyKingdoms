@@ -1,6 +1,5 @@
 using System.Collections;
 using DG.Tweening;
-using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -69,7 +68,6 @@ namespace Player
         #endregion
     
         #region PRIVATE VARIABLES
-        private bool dragonCollision;
         private bool _damaged;
         private bool isJumping;
         private bool isGrounded = true;
@@ -88,8 +86,6 @@ namespace Player
 
         public GameObject Dragon;
         public bool CanMove { get; set; } = false;
-
-        public bool HasGemBlue = false; //TODO no me gusta aqui
 
         public bool IsDefending => isDefending;
 
@@ -193,23 +189,15 @@ namespace Player
                 if (r2Triggered && currentSpecialAttack != null)
                     rbCurrentSpecialAttack.rotation = Quaternion.Slerp(rbCurrentSpecialAttack.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
-            else
-            {
-                rb.rotation = Quaternion.Slerp(rb.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
-
-                if (r2Triggered && currentSpecialAttack != null)
-                    rbCurrentSpecialAttack.rotation = Quaternion.Slerp(rbCurrentSpecialAttack.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
-            }
 
             // MOVIMIENTO DEL ATAQUE ESPECIAL
             if (r2Triggered && currentSpecialAttack != null)
             {
                 rbCurrentSpecialAttack.MovePosition(specialSpellSpawn.position);
-                rbCurrentSpecialAttack.MoveRotation(rbCurrentSpecialAttack.rotation * Quaternion.Euler(0f, rotationSpeed * Time.deltaTime, 0f));
+                rbCurrentSpecialAttack.MoveRotation(specialSpellSpawn.rotation);
             }
-        }
 
-    
+        }
         #endregion
 
         #region SHOOT
@@ -314,11 +302,12 @@ namespace Player
 
         private IEnumerator DefenseActive()
         {
+            yield return new WaitForSeconds(0.5f);
+            CanMove = true;
+            
             yield return new WaitForSeconds(3f);
             defensePrefab.SetActive(false);
             isDefending = false;
-
-            CanMove = true;
         }
     
         #endregion
@@ -387,12 +376,9 @@ namespace Player
         // SACAR FUERA DE ESTE SCRIPT
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Dragon") && !dragonCollision)
+            if (other.CompareTag("Dragon"))
             {
-                dragonCollision = true;
-            
-                if (HasGemBlue)
-                    sceneManager.LoadScene();
+                sceneManager.LoadScene();
             }
             else if (other.CompareTag("Enemy") && !_damaged && !isDefending)
             {
@@ -412,7 +398,6 @@ namespace Player
         private void OnTriggerExit(Collider other)
         {
             _damaged = false;
-            dragonCollision = false;
         }
 
         IEnumerator Damaged(Vector3 enemyPos)
@@ -429,7 +414,7 @@ namespace Player
             Dragon.GetComponent<Transform>().position = position;
             Dragon.SetActive(true);
             Dragon.transform.LookAt(transform);
-            Dragon.transform.DOMoveY(transform.position.y + 1, 2).SetEase(Ease.Linear).Play();
+            Dragon.transform.DOMoveY(transform.position.y, 2).SetEase(Ease.Linear).Play();
         }
     }
 }

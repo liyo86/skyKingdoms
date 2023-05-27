@@ -1,5 +1,7 @@
 using System.Collections;
+using Player;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Boss : MonoBehaviour
 {
@@ -86,7 +88,8 @@ public class Boss : MonoBehaviour
     }
 
     #endregion
-    
+
+    public static Boss Instance;
     public float _timeBetweenJumps = 2f; // Tiempo entre saltos (segundos)
     public float _jumpTimer; // Temporizador para el salto
     public float jumpForce = 15f;
@@ -94,25 +97,37 @@ public class Boss : MonoBehaviour
     private Vector3 originalPosition;
     public GameObject AttackPhase1;
     private bool gameOver;
+    private bool fight;
 
     #region UNITY METHODS
 
     private void Awake()
-    { 
+    {
+        Instance = this;
         bossRigidbody = GetComponent<Rigidbody>();
         shockWaveParticle = GetComponentInChildren<ParticleSystem>();
     }
 
     private void Start()
     {
-        ChangePhase(BossPhase.Phase1);
+        StartCoroutine(StartIA());
     }
     
     void Update()
     {
+        if (!fight) return;
         _currentPhase.Execute(this);
         if(MyGameManager.Instance.gameOver)
             GameOver();
+    }
+
+    private bool CheckPlayerStart() => BoyController.Instance.CanMove;
+
+    private IEnumerator StartIA()
+    {
+        yield return new WaitUntil(CheckPlayerStart);
+        ChangePhase(BossPhase.Phase1);
+        fight = true;
     }
     #endregion
     

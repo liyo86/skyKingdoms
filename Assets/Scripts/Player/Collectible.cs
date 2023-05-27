@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class Collectible : MonoBehaviour
 {
-    public enum CollectibleTypes { NoType, GemBlue, GemPurple, GemRed, Type4, Type5 };
+    public enum CollectibleTypes { NoType, GemBlue, GemPurple, GemRed, GemGreen, Type5 };
 
     public CollectibleTypes CollectibleType; // this gameObject's type
     public bool rotate; // do you want it to rotate?

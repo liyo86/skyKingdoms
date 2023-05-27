@@ -1,5 +1,7 @@
+using DG.Tweening;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Managers
 {
@@ -13,6 +15,9 @@ namespace Managers
 
         [CanBeNull]
         public GameObject Gem_Level1;
+        
+        [CanBeNull]
+        public GameObject Gem_Level_Boss;
         private void Awake()
         {
             if (Instance == null)
@@ -25,6 +30,12 @@ namespace Managers
             }
         }
 
+        private void Start()
+        {
+            if(SceneManager.GetActiveScene().name == "BossBattle")
+                Level3();
+        }
+
         private void Update()
         {
             if (canStart)
@@ -35,10 +46,18 @@ namespace Managers
                     MyDialogueManager.Instance.TextLevel("Level1");
                     Gem_Level1.SetActive(false);
                     canCheck = true;
-                } else if (actualLevel == "level2")
+                } 
+                else if (actualLevel == "level2")
                 {
                     canStart = false;
                     MyDialogueManager.Instance.TextLevel("Level2"); 
+                }
+                else if (actualLevel == "level3") //Boss
+                {
+                    canStart = false;
+                    MyDialogueManager.Instance.TextLevel("Level3"); 
+                    Gem_Level_Boss.SetActive(false);
+                    canCheck = true;
                 }
             }
 
@@ -48,6 +67,10 @@ namespace Managers
                 {
                     CheckEnemyCounter();
                 } 
+                else if (actualLevel == "level3")
+                {
+                    CheckBossLife();
+                }
             }
         }
         
@@ -60,6 +83,13 @@ namespace Managers
         {
             actualLevel = "level2";
         }
+        
+        //Boss
+        public void Level3()
+        {
+            actualLevel = "level3";
+            canStart = true;
+        }
 
         private void CheckEnemyCounter()
         {
@@ -67,6 +97,15 @@ namespace Managers
             {
                 canCheck = false;
                 Gem_Level1.SetActive(true);
+            }
+        }
+        
+        private void CheckBossLife()
+        {
+            if (FlowerBossHealth.Instance.CurrentHealth <= 0f)
+            {
+                Gem_Level_Boss.SetActive(true);
+                Gem_Level_Boss.transform.DOMoveY(transform.position.y, 3).SetEase(Ease.Linear).Play();
             }
         }
 
