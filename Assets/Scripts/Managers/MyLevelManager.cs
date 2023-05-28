@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -11,13 +12,22 @@ namespace Managers
         public bool canStart;
         public bool canCheck;
         public int enemyCount;
+        
         private string actualLevel = "";
+        private bool flowerDefeated;
+        private bool goblinDefeated;
 
         [CanBeNull]
         public GameObject Gem_Level1;
         
         [CanBeNull]
         public GameObject Gem_Level_Boss;
+        
+        [CanBeNull]
+        public GameObject Goblin;
+        
+        [CanBeNull]
+        public GameObject GoblinWeapon;
         private void Awake()
         {
             if (Instance == null)
@@ -46,16 +56,16 @@ namespace Managers
                     MyDialogueManager.Instance.TextLevel("Level1");
                     Gem_Level1.SetActive(false);
                     canCheck = true;
-                } 
+                }
                 else if (actualLevel == "level2")
                 {
                     canStart = false;
-                    MyDialogueManager.Instance.TextLevel("Level2"); 
+                    MyDialogueManager.Instance.TextLevel("Level2");
                 }
                 else if (actualLevel == "level3") //Boss
                 {
                     canStart = false;
-                    MyDialogueManager.Instance.TextLevel("Level3"); 
+                    MyDialogueManager.Instance.TextLevel("Level3");
                     Gem_Level_Boss.SetActive(false);
                     canCheck = true;
                 }
@@ -66,14 +76,17 @@ namespace Managers
                 if (actualLevel == "level1")
                 {
                     CheckEnemyCounter();
-                } 
+                }
                 else if (actualLevel == "level3")
                 {
-                    CheckBossLife();
+                    if (!flowerDefeated)
+                        CheckFlowerBossLife();
+                    else if (flowerDefeated && !goblinDefeated)
+                        CheckGoblinBossLife();
                 }
             }
         }
-        
+
         public void Level1()
         {
             actualLevel = "level1";
@@ -100,13 +113,34 @@ namespace Managers
             }
         }
         
-        private void CheckBossLife()
+        private void CheckFlowerBossLife()
         {
+            if (FlowerBossHealth.Instance == null) return;
+            
             if (FlowerBossHealth.Instance.CurrentHealth <= 0f)
             {
+                flowerDefeated = true;
+                StartCoroutine(StartGoblinIA());
+            }
+        }
+
+        private void CheckGoblinBossLife()
+        {
+            if (GoblinBossHealth.Instance == null) return;
+            
+            if (GoblinBossHealth.Instance.CurrentHealth <= 0f)
+            {
+                goblinDefeated = true;
                 Gem_Level_Boss.SetActive(true);
                 Gem_Level_Boss.transform.DOMoveY(transform.position.y, 3).SetEase(Ease.Linear).Play();
             }
+        }
+
+        private IEnumerator StartGoblinIA()
+        {
+            yield return new WaitForSeconds(2f);
+            Goblin.SetActive(true);
+            GoblinWeapon.SetActive(true);
         }
 
     }

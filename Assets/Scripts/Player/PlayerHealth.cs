@@ -17,6 +17,11 @@ public class PlayerHealth : MonoBehaviour
         get => currentHealth;
     }
 
+    public int MaxHealth
+    {
+        get => maxHealth;
+    }
+
     void Start()
     {
         Instance = this;

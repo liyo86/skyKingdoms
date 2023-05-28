@@ -1,7 +1,6 @@
 using System.Collections;
 using Player;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Boss : MonoBehaviour
 {
@@ -37,11 +36,6 @@ public class Boss : MonoBehaviour
     private float _secondsListening;
 
     private float _secondsListeningSaved;
-    public float SecondsListening
-    {
-        get => _secondsListening;
-        set => _secondsListening = value;
-    }
 
     #endregion
     
@@ -54,15 +48,6 @@ public class Boss : MonoBehaviour
     }
     
     private FSMBoss _currentPhase;
-    
-    private bool _canListen;
-
-    public bool CanListen
-    {
-        get => _canListen;
-
-        set => _canListen = value;
-    }
     #endregion
     
     #region REFERENCIAS
@@ -90,9 +75,9 @@ public class Boss : MonoBehaviour
     #endregion
 
     public static Boss Instance;
-    public float _timeBetweenJumps = 2f; // Tiempo entre saltos (segundos)
-    public float _jumpTimer; // Temporizador para el salto
-    public float jumpForce = 15f;
+    public float _timeBetweenJumps; // Tiempo entre saltos (segundos)
+    private float _jumpTimer; // Temporizador para el salto
+    public float jumpForce;
     private ParticleSystem shockWaveParticle;
     private Vector3 originalPosition;
     public GameObject AttackPhase1;
@@ -163,10 +148,15 @@ public class Boss : MonoBehaviour
     private IEnumerator WaitAndShoot()
     {
         yield return new WaitForSeconds(0.5f);
+        
+        if(shockWaveParticle != null)
+            shockWaveParticle.Play();
+        
         MyAudioManager.Instance.PlaySfx("bossAttack1SFX");
-        Vector3 attackOnePosition = new Vector3(transform.position.x, UnityEngine.Random.Range(1, 3), transform.position.z - 6);
+        
+        Vector3 attackOnePosition = new Vector3(transform.position.x, UnityEngine.Random.Range(0f, 2f), transform.position.z - 6);
+        
         Instantiate(AttackPhase1, attackOnePosition, Quaternion.identity);
-        shockWaveParticle.Play();
     }
 
     void GameOver()

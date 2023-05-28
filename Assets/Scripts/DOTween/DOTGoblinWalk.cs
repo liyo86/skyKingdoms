@@ -20,7 +20,6 @@ public class DOTGoblinWalk : MonoBehaviour
     {
         if (currentTween != null && currentTween.IsPlaying())
         {
-            Debug.Log("Me paro");
             currentTween.Kill();
             currentTween = null;
             transform.position = new Vector3(transform.position.x, initialY, transform.position.z);

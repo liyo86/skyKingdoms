@@ -43,7 +43,7 @@ public class GhostMazeAI : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) <= visionRange)
         {
             isChasing = true;
-            Debug.Log("¡El fantasma ha detectado al jugador y lo está persiguiendo!");
+            //Debug.Log("¡El fantasma ha detectado al jugador y lo está persiguiendo!");
         }
         
         if (Vector3.Distance(transform.position, patrolDestination) < 0.1f)
@@ -61,7 +61,7 @@ public class GhostMazeAI : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) > visionRange)
         {
             isChasing = false;
-            Debug.Log("El jugador ha escapado del rango de visión del fantasma");
+            //Debug.Log("El jugador ha escapado del rango de visión del fantasma");
         }
         
         transform.LookAt(player.position);
@@ -77,6 +77,7 @@ public class GhostMazeAI : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isReset && !BoyController.Instance.IsDefending)
         {
+            Debug.Log("Entro");
             isReset = true;
             ResetGame();
         }

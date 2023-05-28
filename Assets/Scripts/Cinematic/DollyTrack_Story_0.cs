@@ -1,11 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using Managers;
 using UnityEngine;
 
 public class DollyTrack_Story_0 : MonoBehaviour
 {
+    #region VARIABLES
     public CinemachineDollyCart dollyCartSeq1;
     public CinemachineDollyCart dollyCartSeq2;
     public CinemachineVirtualCamera finalCam;
@@ -17,6 +17,7 @@ public class DollyTrack_Story_0 : MonoBehaviour
     public GameObject Princess;
 
     public DOTGoblinWalk Goblin;
+    #endregion
 
     #region References
 
@@ -54,7 +55,7 @@ public class DollyTrack_Story_0 : MonoBehaviour
         StartCoroutine(DollyCart());
     }
     
-    IEnumerator DollyCart()
+    private IEnumerator DollyCart()
     {
         dollyCartSeq1.m_Speed = 1;
         yield return new WaitForSeconds(5); //Camino al centro de la sala

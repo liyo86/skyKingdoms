@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MyAudioManager : MonoBehaviour
@@ -14,8 +11,10 @@ public class MyAudioManager : MonoBehaviour
     public AudioClip cinematic;
     public AudioClip dayAmbient;
     public AudioClip flight;
+    public AudioClip finalBoss;
     public AudioClip boss;
     public AudioClip dungeon;
+    public AudioClip theEnd;
     
     // SFX
     public AudioClip ringSFX;
@@ -94,6 +93,16 @@ public class MyAudioManager : MonoBehaviour
                 break;
             case nameof(boss):
                 sourceMusic.clip = boss;
+                sourceMusic.loop = true;
+                sourceMusic.Play();
+                break;
+            case nameof(finalBoss):
+                sourceMusic.clip = finalBoss;
+                sourceMusic.loop = true;
+                sourceMusic.Play();
+                break;
+            case nameof(theEnd):
+                sourceMusic.clip = theEnd;
                 sourceMusic.loop = true;
                 sourceMusic.Play();
                 break;

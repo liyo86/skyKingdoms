@@ -49,6 +49,18 @@ namespace Player
         [Tooltip("Transform para instanciar los ataques especiales.")]
         [SerializeField]
         private Transform specialSpellSpawn;
+        
+
+        public float defenseCooldown; // Tiempo de reutilización de la defensa
+        
+        public float specialAttackCooldown; // Tiempo de reutilización del ataque especial
+        
+        public float shootCooldown; // Tiempo de reutilización del disparo
+
+        public bool isDefenseCooldown = false;
+        public bool isSpecialAttackCooldown = false;
+        public bool isShootCooldown = false;
+
     
         public LoadScreenManager sceneManager;
         #endregion
@@ -203,17 +215,19 @@ namespace Player
         #region SHOOT
         private void OnShootPerformed(InputAction.CallbackContext context)
         {
-            if (!CanMove) return;
-            
+            if (!CanMove || isShootCooldown) return;
+
             if (isGrounded)
             {
-                CanMove = false;
-
                 movement = Vector2.zero;
                 animator.SetTrigger("shoot");
                 StartCoroutine(nameof(Shoot));
+
+                isShootCooldown = true;
+                StartCoroutine(ShootCooldownTimer());
             }
         }
+
 
         IEnumerator Shoot()
         {
@@ -222,8 +236,12 @@ namespace Player
             MyAudioManager.Instance.PlaySfx("fireVoice");
 
             Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
-
-            CanMove = true;
+        }
+        
+        private IEnumerator ShootCooldownTimer()
+        {
+            yield return new WaitForSeconds(shootCooldown);
+            isShootCooldown = false;
         }
     
         #endregion
@@ -251,7 +269,7 @@ namespace Player
                 isJumping = true;
                 isGrounded = false;
 
-                rb.AddForce(Vector3.up, ForceMode.Impulse);
+                //rb.AddForce(Vector3.up, ForceMode.Impulse);
                 
                 rb.velocity = new Vector3(rb.velocity.x, Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), rb.velocity.z);
             }
@@ -290,24 +308,34 @@ namespace Player
 
         private void OnDefensePerformed(InputAction.CallbackContext context)
         {
-            if (!CanMove) return;
-            
+            if (!CanMove || isDefenseCooldown) return;
+
             CanMove = false;
 
             isDefending = true;
             MyAudioManager.Instance.PlaySfx("defenseVoice");
+            //animator.SetTrigger("shoot");
             defensePrefab.SetActive(true);
+            
+            isDefenseCooldown = true;
             StartCoroutine(DefenseActive());
         }
 
+        private IEnumerator DefenseCooldownTimer()
+        {
+            yield return new WaitForSeconds(defenseCooldown);
+            isDefenseCooldown = false;
+        }
+        
         private IEnumerator DefenseActive()
         {
             yield return new WaitForSeconds(0.5f);
             CanMove = true;
             
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1f);
             defensePrefab.SetActive(false);
             isDefending = false;
+            StartCoroutine(DefenseCooldownTimer());
         }
     
         #endregion
@@ -316,11 +344,12 @@ namespace Player
 
         private void OnR2Hold(InputAction.CallbackContext context)
         {
-            if (!CanMove) return;
-            
+            //if (!CanMove) return;
+            while (true) return;
+
             if (context.performed)
             {
-                if (currentSpecialAttack != null) return;
+                if (currentSpecialAttack != null || isSpecialAttackCooldown) return;
                 r2Triggered = true;
                 animator.SetTrigger(Specialattack);
                 StartCoroutine(LoadSpecialAttack());
@@ -331,8 +360,18 @@ namespace Player
                 r2Triggered = false;
                 animator.SetTrigger(Releasespecial);
                 StartCoroutine(nameof(LaunchSpecialAttack));
+
+                isSpecialAttackCooldown = true;
+                StartCoroutine(SpecialAttackCooldownTimer());
             }
         }
+
+        private IEnumerator SpecialAttackCooldownTimer()
+        {
+            yield return new WaitForSeconds(specialAttackCooldown);
+            isSpecialAttackCooldown = false;
+        }
+
 
         private IEnumerator LaunchSpecialAttack()
         {
@@ -372,7 +411,7 @@ namespace Player
         }
 
         #endregion
-    
+        
         // SACAR FUERA DE ESTE SCRIPT
         private void OnTriggerEnter(Collider other)
         {
@@ -386,12 +425,24 @@ namespace Player
                 PlayerHealth.Instance.AddDamage(10);
                 StartCoroutine(Damaged(other.transform.position));
                 animator.SetTrigger("damage");
-            } else if (other.CompareTag("BossAttack1") && !_damaged && !isDefending)
+            } 
+            else if (other.CompareTag("BossAttack1") && !_damaged && !isDefending)
             {
                 _damaged = true;
                 PlayerHealth.Instance.AddDamage(25);
                 StartCoroutine(Damaged(other.transform.position));
                 animator.SetTrigger("damage");
+            }
+            else if (other.CompareTag("Bat") && !_damaged && !isDefending)
+            {
+                _damaged = true;
+                PlayerHealth.Instance.AddDamage(30);
+                StartCoroutine(Damaged(other.transform.position));
+                animator.SetTrigger("damage");
+            } 
+            else if (other.CompareTag("Limit"))
+            {
+                MyGameManager.Instance.GameOver();
             }
         }
 

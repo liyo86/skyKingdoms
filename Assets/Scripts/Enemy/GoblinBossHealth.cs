@@ -1,32 +1,30 @@
+using System;
 using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.UI;
+using UnityEngine;
 
-public class FlowerBossHealth : MonoBehaviour
+public class GoblinBossHealth : MonoBehaviour
 {
     [Tooltip("Slider de la vida del enemigo.")]
     [SerializeField] private Slider healthSlider;
-    
-    [SerializeField] private GameObject hitParticle;
 
     private int maxHealth;
     private int currentHealth;
     private bool isDead;
     private bool gameOver;
 
+    public static GoblinBossHealth Instance;
+
     public int CurrentHealth
     {
         get => currentHealth;
     }
-    
-    public static FlowerBossHealth Instance;
 
     private void Awake()
     {
         Instance = this;
     }
-
     void Start()
     {
         Init();
@@ -73,6 +71,7 @@ public class FlowerBossHealth : MonoBehaviour
     
     public void Reset()
     {
+        healthSlider.gameObject.SetActive(true);
         maxHealth = 100;
         currentHealth = maxHealth;
         healthSlider.maxValue = maxHealth;
@@ -84,8 +83,6 @@ public class FlowerBossHealth : MonoBehaviour
     {
         if (other.CompareTag("Fire"))
         {
-            //hitParticle.SetActive(true);
-            
             AddDamage(10);
         }
     }
@@ -102,8 +99,8 @@ public class FlowerBossHealth : MonoBehaviour
 
         transform.DOScale(new Vector3(0, 0, 0), deathDuration).SetEase(Ease.InFlash).OnComplete(() =>
         {
-            //gameObject.SetActive(false);
-            Destroy(gameObject);
+           // gameObject.SetActive(false);
+           Destroy(gameObject);
         }).Play();
     }
 

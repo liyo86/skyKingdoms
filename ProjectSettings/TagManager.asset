@@ -22,6 +22,9 @@ TagManager:
   - RingsUI
   - Ring
   - BossAttack1
+  - Bat
+  - Wall
+  - Limit
   layers:
   - Default
   - TransparentFX
@@ -35,7 +38,7 @@ TagManager:
   - Defense
   - AnimationGameOver
   - BoyHud
-  - 
+  - EnemyWeapon
   - 
   - 
   - 

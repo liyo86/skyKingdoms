@@ -398,6 +398,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &948004847 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2257766788053181297, guid: c9a5334635a054c5e96af44f56a8e8f0, type: 3}
+  m_PrefabInstance: {fileID: 2257766787949049512}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1078283451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -489,13 +500,24 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5277623340904341985}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e336a8a951b594d29ad3b7371680cac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputActions: {fileID: -944628639613478452, guid: 61fcc028162a44830b980c6db5abd667, type: 3}
   smoothTime: 1
+--- !u!114 &1341796939 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2257766787397271276, guid: c9a5334635a054c5e96af44f56a8e8f0, type: 3}
+  m_PrefabInstance: {fileID: 2257766787949049512}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1525905194
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3510826846203341265, guid: 3fcd573003c7b4926a06f9ddffce6430, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3510826846203341293, guid: 3fcd573003c7b4926a06f9ddffce6430, type: 3}
       propertyPath: m_Pivot.x
@@ -788,6 +810,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 8518239529809431139, guid: 65015b8874485455b8754557d0e5bb86, type: 3}
+      propertyPath: sceneManager
+      value: 
+      objectReference: {fileID: 1078283452}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65015b8874485455b8754557d0e5bb86, type: 3}
 --- !u!1 &2032352828
@@ -927,6 +953,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9a5334635a054c5e96af44f56a8e8f0, type: 3}
+--- !u!114 &2257766787949049513 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2257766787673187039, guid: c9a5334635a054c5e96af44f56a8e8f0, type: 3}
+  m_PrefabInstance: {fileID: 2257766787949049512}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2995027492720414745
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -934,18 +971,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2995027492041135786, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2995027492041135828, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: Dragon
       value: 
       objectReference: {fileID: 2157593042592591428}
-    - target: {fileID: 2995027492041135828, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
-      propertyPath: jumpHeight
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2995027492041135828, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: sceneManager
       value: 
@@ -954,6 +983,18 @@ PrefabInstance:
       propertyPath: HP
       value: 
       objectReference: {fileID: 8778046150558953235}
+    - target: {fileID: 2995027492720414747, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
+      propertyPath: shootImage
+      value: 
+      objectReference: {fileID: 1341796939}
+    - target: {fileID: 2995027492720414747, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
+      propertyPath: defenseImage
+      value: 
+      objectReference: {fileID: 2257766787949049513}
+    - target: {fileID: 2995027492720414747, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
+      propertyPath: specialAttackImage
+      value: 
+      objectReference: {fileID: 948004847}
     - target: {fileID: 6013166275688519046, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: m_RootOrder
       value: 9

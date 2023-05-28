@@ -58,7 +58,10 @@ public class MyGameManager : MonoBehaviour
                 break;
             case "BossBattle":
                 MyAudioManager.Instance.PlayMusic("boss");
-                MyLevelManager.Instance.Level3(); //TODO cambiar nombre
+                MyLevelManager.Instance.Level3();
+                break;
+            case "TheEnd":
+                MyAudioManager.Instance.PlayMusic("theEnd");
                 break;
             case "Story_0":
                 MyAudioManager.Instance.PlayMusic("dungeon");

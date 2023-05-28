@@ -4,12 +4,12 @@
 
     public class DollyTrackLastWaypoint : MonoBehaviour
     {
+        #region VARIABLES
         public CinemachineDollyCart dollyCartSeq1;
         public CinemachineDollyCart dollyCartSeq2;
         public CinemachineDollyCart dollyCartSeq3;
         public CinemachineDollyCart dollyCartSeq4;
         public GameObject canvasToActivate;
-        public GameObject canvasToJump;
         public GameObject RainBow;
         public GameObject FireAttack;
         public LoadScreenManager _LoadScreenManager;
@@ -24,36 +24,27 @@
         private Renderer boy_begins_render;
         private bool boy_begins_anim;
         private bool boy_begins_animIdle;
-        
-        public GameObject boy_middle;
+
         public GameObject boy_ends;
         public Animator boy_ends_animator;
 
 
         public GameObject boy_magic;
-        private Renderer boy_magic_render;
         private Animator boy_magic_animator;
-        private bool boy_magic_anim;
+        #endregion
 
-        //public Material boyMaterial;
-        
         #region References
         private float pathLength1;
-        private float pathLength2;
         private float pathLength3;
         private float pathLength4;
-        private float currentAlpha = 0.0f;
-        private float targetAlpha = 1.0f;
-        private float resetAlpha = 1.0f;
-        private float fadeInDuration = 2.0f;
+
         #endregion
         
-        
+        #region UNITY METHODS
         private void Awake()
         {
             boy_begins_render = boy_begins.GetComponentInChildren<Renderer>();
             boy_magic_animator = boy_magic.GetComponent<Animator>();
-            boy_magic_render = boy_magic.GetComponentInChildren<Renderer>();
             boy_ends_animator = boy_ends.GetComponent<Animator>();
         }
 
@@ -63,12 +54,7 @@
             {
                 pathLength1 = dollyCartSeq1.m_Path.PathLength;
             }
-            
-            if (dollyCartSeq2.m_Path != null)
-            {
-                pathLength2 = dollyCartSeq2.m_Path.PathLength;
-            }
-            
+
             if (dollyCartSeq3.m_Path != null)
             {
                 pathLength3 = dollyCartSeq3.m_Path.PathLength;
@@ -83,52 +69,14 @@
 
         void Update()
         {
-            //BoyBeginsAnim();
-            
-            //BoyMagicAnim();
-            
             DollyCart();
         }
+        #endregion
 
-        void BoyBeginsAnim()
-        {
-            if (!boy_begins_anim)
-            {
-                currentAlpha += Time.deltaTime / fadeInDuration;
-                currentAlpha = Mathf.Clamp(currentAlpha, 0.0f, targetAlpha);
-                Utils.ChangeMaterial.SetMaterialAlpha(boy_begins_render, currentAlpha);
-
-                if (currentAlpha >= targetAlpha)
-                {
-                    boy_begins_anim = true;
-                    //boy_begins_render.material = boyMaterial;
-                }
-            }
-        }
-        
-        void BoyMagicAnim()
-        {
-            if (boy_magic_anim)
-            {
-                resetAlpha -= Time.deltaTime / fadeInDuration;
-                Utils.ChangeMaterial.SetMaterialAlpha(boy_begins_render, resetAlpha);
-                
-                currentAlpha += Time.deltaTime / fadeInDuration;
-                currentAlpha = Mathf.Clamp(currentAlpha, 0.0f, targetAlpha);
-                Utils.ChangeMaterial.SetMaterialAlpha(boy_magic_render, currentAlpha);
-
-                if (currentAlpha >= targetAlpha)
-                {
-                    boy_magic_anim = false;
-                    //boy_magic_render.material = boyMaterial;
-                }
-            }   
-        }
-
-        IEnumerator BoyMagicActions()
+        #region CHARACTER SEQUENCES
+        private IEnumerator BoyMagicActions()
         {
             dollyCartSeq4.m_Speed = 1.5f;
-            boy_magic_anim = true;
             boy_magic_animator.SetFloat("speed", 2f);
 
             yield return new WaitForSeconds(2.5f);
@@ -141,15 +89,17 @@
             FireAttack.transform.Translate(Vector3.forward * 5f * Time.deltaTime);
         }
 
-        IEnumerator DrawRainbow()
+        private IEnumerator DrawRainbow()
         {
             yield return new WaitForSeconds(6.5f);
             RainBow.SetActive(true);
         }
-
-        void DollyCart()
+        #endregion
+        
+        #region CAMERA MOVEMENT
+        private void DollyCart()
         {
-            if (!dragonActivated && dollyCartSeq1.m_Position >= pathLength1 - 15) // Dragon
+            if (!dragonActivated && dollyCartSeq1.m_Position >= pathLength1)
             {
                 dragonActivated = true;
                 boy_ends.SetActive(true);
@@ -173,19 +123,20 @@
             
             if (dollyCartSeq4.m_Position >= pathLength4) // Canvas final
             {
-                canvasToJump.SetActive(false);
                 StartCoroutine(DrawRainbow());
             }
         }
+        #endregion
         
+        #region UI
         public void EndsCinematic()
         {
             if (!btnPressed)
             {
                 btnPressed = true;
                 canvasToActivate.SetActive(false);
-                canvasToJump.SetActive(false);
                 _LoadScreenManager.LoadScene();
             }
         }
+        #endregion
     }
