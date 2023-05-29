@@ -401,6 +401,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 29120899}
     - target: {fileID: 4366944932994063406, guid: bc54a6cb7ddeb40baae280865018e01b, type: 3}
+      propertyPath: sceneName
+      value: Cinematic
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366944932994063406, guid: bc54a6cb7ddeb40baae280865018e01b, type: 3}
       propertyPath: loadedText
       value: 
       objectReference: {fileID: 29120900}

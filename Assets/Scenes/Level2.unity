@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: Dragon
       value: 
       objectReference: {fileID: 1719002411}
+    - target: {fileID: 2995027492041135828, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2995027492041135830, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: HP
       value: 
@@ -150,6 +154,10 @@ PrefabInstance:
       propertyPath: specialAttackImage
       value: 
       objectReference: {fileID: 1325714756}
+    - target: {fileID: 2995027492720414748, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6013166275688519046, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -2539,7 +2547,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7733120445728639561}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e336a8a951b594d29ad3b7371680cac8, type: 3}
   m_Name: 

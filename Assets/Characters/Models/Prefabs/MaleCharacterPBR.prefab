@@ -2668,7 +2668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38964a2c768db4aa2ba3ddaa07b2c06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthSlider: {fileID: 0}
+  HP: {fileID: 0}
   normalColor: {r: 0.15686275, g: 0.8, b: 0, a: 0}
   damageColor: {r: 0.6320754, g: 0.08050018, b: 0.14072035, a: 0.8352941}
 --- !u!114 &1290717246
@@ -2692,8 +2692,20 @@ MonoBehaviour:
   groundCheckDistance: 0.05
   spellPrefab: {fileID: 121802, guid: 8f18e1d8c46c51f429429815455062fc, type: 3}
   defensePrefab: {fileID: 6722363679402819157}
+  specialAttackPrefab: {fileID: 0}
   spellSpawn: {fileID: 1167770400949585769}
+  specialSpellSpawn: {fileID: 0}
+  defenseCooldown: 0
+  specialAttackCooldown: 0
+  shootCooldown: 0
+  isDefenseCooldown: 0
+  isSpecialAttackCooldown: 0
+  isShootCooldown: 0
+  sceneManager: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 61fcc028162a44830b980c6db5abd667, type: 3}
+  loadTime: 1
+  maxScale: 1
+  Dragon: {fileID: 0}
 --- !u!1 &8206070634150816031
 GameObject:
   m_ObjectHideFlags: 0

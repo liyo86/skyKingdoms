@@ -47,5 +47,5 @@ MonoBehaviour:
   loadingScreenPanel: {fileID: 0}
   loadedImg: {fileID: 0}
   loadedText: {fileID: 0}
-  sceneName: Cinematic
+  sceneName: Story_0
   minLoadTime: 1
