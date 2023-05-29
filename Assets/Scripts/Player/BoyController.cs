@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    public class BoyController : MonoBehaviour
+    public class BoyController : MonoBehaviour, IAttackCooldown
     {
         #region INSPECTOR VARIABLES
         [Header("CONFIGURATION\n")]
@@ -51,15 +51,23 @@ namespace Player
         private Transform specialSpellSpawn;
         
 
+        //CoolDown
         public float defenseCooldown; // Tiempo de reutilización de la defensa
-        
+    
         public float specialAttackCooldown; // Tiempo de reutilización del ataque especial
-        
+    
         public float shootCooldown; // Tiempo de reutilización del disparo
 
         public bool isDefenseCooldown = false;
         public bool isSpecialAttackCooldown = false;
         public bool isShootCooldown = false;
+    
+        public bool IsDefenseCooldown => isDefenseCooldown;
+        public float DefenseCooldown => defenseCooldown;
+        public bool IsShootCooldown => isShootCooldown;
+        public float ShootCooldown => shootCooldown;
+        public bool IsSpecialAttackCooldown => isSpecialAttackCooldown;
+        public float SpecialAttackCooldown => specialAttackCooldown;
 
     
         public LoadScreenManager sceneManager;
@@ -100,7 +108,7 @@ namespace Player
         public bool CanMove { get; set; } = false;
 
         public bool IsDefending => isDefending;
-
+        
         #endregion
     
         #region UNITY METHODS
@@ -216,18 +224,23 @@ namespace Player
         private void OnShootPerformed(InputAction.CallbackContext context)
         {
             if (!CanMove || isShootCooldown) return;
+            isShootCooldown = true;
 
             if (isGrounded)
             {
                 movement = Vector2.zero;
                 animator.SetTrigger("shoot");
                 StartCoroutine(nameof(Shoot));
-
-                isShootCooldown = true;
+                
                 StartCoroutine(ShootCooldownTimer());
             }
         }
-
+        
+        private IEnumerator ShootCooldownTimer()
+        {
+            yield return new WaitForSeconds(shootCooldown);
+            isShootCooldown = false;
+        }
 
         IEnumerator Shoot()
         {
@@ -238,12 +251,6 @@ namespace Player
             Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
         }
         
-        private IEnumerator ShootCooldownTimer()
-        {
-            yield return new WaitForSeconds(shootCooldown);
-            isShootCooldown = false;
-        }
-    
         #endregion
 
         #region MOVEMENT
@@ -314,18 +321,11 @@ namespace Player
 
             isDefending = true;
             MyAudioManager.Instance.PlaySfx("defenseVoice");
-            //animator.SetTrigger("shoot");
             defensePrefab.SetActive(true);
             
-            isDefenseCooldown = true;
             StartCoroutine(DefenseActive());
         }
 
-        private IEnumerator DefenseCooldownTimer()
-        {
-            yield return new WaitForSeconds(defenseCooldown);
-            isDefenseCooldown = false;
-        }
         
         private IEnumerator DefenseActive()
         {
@@ -335,7 +335,15 @@ namespace Player
             yield return new WaitForSeconds(1f);
             defensePrefab.SetActive(false);
             isDefending = false;
+            
+            isDefenseCooldown = true;
             StartCoroutine(DefenseCooldownTimer());
+        }
+        
+        private IEnumerator DefenseCooldownTimer()
+        {
+            yield return new WaitForSeconds(defenseCooldown);
+            isDefenseCooldown = false;
         }
     
         #endregion

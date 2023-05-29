@@ -51,6 +51,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1290717246, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290717246, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
       propertyPath: jumpHeight
       value: 2
       objectReference: {fileID: 0}
@@ -144,6 +148,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
+--- !u!4 &4153648564898765187 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1167770400949585769, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
+  m_PrefabInstance: {fileID: 2995027493041921770}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6013166275688519046 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8855052669661678444, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
@@ -256,3 +265,26 @@ MonoBehaviour:
   shootImage: {fileID: 0}
   defenseImage: {fileID: 0}
   specialAttackImage: {fileID: 0}
+--- !u!114 &2995027492720414748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6357075458587463484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d5adf8c95f37437a842ca252af01a38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plantCount: 5
+  moveSpeed: 1.5
+  jumpForce: 2
+  spellPrefab: {fileID: 121802, guid: 8f18e1d8c46c51f429429815455062fc, type: 3}
+  spellSpawn: {fileID: 4153648564898765187}
+  defenseCooldown: 5
+  specialAttackCooldown: 15
+  shootCooldown: 2
+  isDefenseCooldown: 0
+  isSpecialAttackCooldown: 0
+  isShootCooldown: 0

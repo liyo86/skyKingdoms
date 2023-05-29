@@ -1,3 +1,4 @@
+using AI.Player_Controller;
 using Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,102 +9,107 @@ public class PlayerAttacksCoolDown : MonoBehaviour
     public Image defenseImage;
     public Image specialAttackImage;
 
-    private bool isDefenseCoolDown = false;
-    private bool isShootCoolDown = false;
-    private bool isSpecialAttackCoolDown = false;
+    private IAttackCooldown attackCooldownController; // Referencia a la interfaz común
 
-    void Update()
+    private bool isDefenseCooldown = false;
+    private bool isShootCooldown = false;
+    private bool isSpecialAttackCooldown = false;
+
+    private void Start()
+    {
+        // Obtener la referencia al controlador de enfriamientos apropiado
+        if (GetComponent<BoyController>().gameObject.activeSelf)
+        {
+            attackCooldownController = GetComponent<BoyController>();
+        }
+        else if (GetComponent<AIController>().gameObject.activeSelf)
+        {
+            attackCooldownController = GetComponent<AIController>();
+        }
+    }
+
+    private void Update()
     {
         Defense();
         Shoot();
+        //SpecialAttack();
     }
-
-
-    #region DEFENSE
 
     private void Defense()
     {
-        //Defense
-        if (BoyController.Instance.isDefenseCooldown)
+        if (attackCooldownController != null && attackCooldownController.IsDefenseCooldown)
         {
-            OnDefenseCoolDown();
+            OnDefenseCooldown();
             GetDefenseCooldownProgress();
         }
-        else if (!BoyController.Instance.isDefenseCooldown)
+        else
         {
             defenseImage.fillAmount = 1f;
-            isDefenseCoolDown = false;
+            isDefenseCooldown = false;
         }
     }
-    private void OnDefenseCoolDown()
+
+    private void OnDefenseCooldown()
     {
-        if (isDefenseCoolDown) return;
+        if (isDefenseCooldown) return;
         defenseImage.fillAmount = 0f;
-        isDefenseCoolDown = true;
+        isDefenseCooldown = true;
     }
-    
+
     private void GetDefenseCooldownProgress()
     {
-        defenseImage.fillAmount += 1.0f / BoyController.Instance.defenseCooldown * Time.deltaTime;
+        defenseImage.fillAmount += 1.0f / attackCooldownController.DefenseCooldown * Time.deltaTime;
     }
-    #endregion
-    
-    #region SHOOT
 
     private void Shoot()
     {
-        if (BoyController.Instance.isShootCooldown)
+        if (attackCooldownController != null && attackCooldownController.IsShootCooldown)
         {
-            OnShootCoolDown();
+            OnShootCooldown();
             GetShootCooldownProgress();
         }
-        else if (!BoyController.Instance.isShootCooldown)
+        else
         {
             shootImage.fillAmount = 1f;
-            isShootCoolDown = false;
+            isShootCooldown = false;
         }
     }
-    
-    private void OnShootCoolDown()
+
+    private void OnShootCooldown()
     {
-        if (isShootCoolDown) return;
+        if (isShootCooldown) return;
         shootImage.fillAmount = 0f;
-        isShootCoolDown = true;
+        isShootCooldown = true;
     }
-    
+
     private void GetShootCooldownProgress()
     {
-        shootImage.fillAmount += 1.0f / BoyController.Instance.shootCooldown * Time.deltaTime;
+        shootImage.fillAmount += 1.0f / attackCooldownController.ShootCooldown * Time.deltaTime;
     }
-    #endregion
-    
-    #region SPECIAL
 
     private void SpecialAttack()
     {
-        if (BoyController.Instance.isSpecialAttackCooldown)
+        if (attackCooldownController != null && attackCooldownController.IsSpecialAttackCooldown)
         {
-            OnSpecialCoolDown();
+            OnSpecialAttackCooldown();
             GetSpecialAttackCooldownProgress();
         }
-        else if (!BoyController.Instance.isSpecialAttackCooldown)
+        else
         {
             specialAttackImage.fillAmount = 1f;
-            isSpecialAttackCoolDown = false;
+            isSpecialAttackCooldown = false;
         }
     }
-    
-    
-    private void OnSpecialCoolDown()
+
+    private void OnSpecialAttackCooldown()
     {
-        if (isSpecialAttackCoolDown) return;
+        if (isSpecialAttackCooldown) return;
         specialAttackImage.fillAmount = 0f;
-        isSpecialAttackCoolDown = true;
+        isSpecialAttackCooldown = true;
     }
-    
+
     private void GetSpecialAttackCooldownProgress()
     {
-        specialAttackImage.fillAmount += 1.0f / BoyController.Instance.specialAttackCooldown * Time.deltaTime;
+        specialAttackImage.fillAmount += 1.0f / attackCooldownController.SpecialAttackCooldown * Time.deltaTime;
     }
-    #endregion
 }

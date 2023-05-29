@@ -500,7 +500,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5277623340904341985}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e336a8a951b594d29ad3b7371680cac8, type: 3}
   m_Name: 
@@ -995,6 +995,10 @@ PrefabInstance:
       propertyPath: specialAttackImage
       value: 
       objectReference: {fileID: 948004847}
+    - target: {fileID: 2995027492720414748, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
+      propertyPath: jumpForce
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6013166275688519046, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -2171,7 +2175,7 @@ MonoBehaviour:
     m_InvertInput: 1
     m_MinValue: -180
     m_MaxValue: 180
-    m_Wrap: 1
+    m_Wrap: 0
     m_Recentering:
       m_enabled: 0
       m_WaitTime: 1
