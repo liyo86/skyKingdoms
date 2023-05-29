@@ -690,6 +690,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3510826846203341294, guid: 3fcd573003c7b4926a06f9ddffce6430, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fcd573003c7b4926a06f9ddffce6430, type: 3}
 --- !u!114 &1589064051 stripped
@@ -814,6 +818,10 @@ PrefabInstance:
       propertyPath: sceneManager
       value: 
       objectReference: {fileID: 1078283452}
+    - target: {fileID: 8837082122945070194, guid: 65015b8874485455b8754557d0e5bb86, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65015b8874485455b8754557d0e5bb86, type: 3}
 --- !u!1 &2032352828
@@ -863,6 +871,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 5277623339095847327}
+    - target: {fileID: 2257766787241494129, guid: c9a5334635a054c5e96af44f56a8e8f0, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2257766787241494130, guid: c9a5334635a054c5e96af44f56a8e8f0, type: 3}
       propertyPath: m_Pivot.x
       value: 0

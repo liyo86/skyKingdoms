@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MenuUI : InputsUI
@@ -11,10 +10,11 @@ public class MenuUI : InputsUI
         {
             case 0:
                 menuCanvas.SetActive(false);
-                sceneManager.LoadScene();
+                sceneManager.LoadScene("Story_0");
                 break;
             case 1:
-                Debug.Log("Controles");
+                menuCanvas.SetActive(false);
+                sceneManager.LoadScene("Controls");
                 break;
         }
     }

@@ -90,10 +90,13 @@ namespace Player
         #region PRIVATE VARIABLES
         private bool _damaged;
         private bool isJumping;
+        private bool isShooting;
+        private bool isShootingInAir;
         private bool isGrounded = true;
         private bool isDefending;
+        private float gravity = 9.8f; // Valor de la gravedad
+        private Coroutine shootCoroutine;
         public float loadTime = 1f;
-        public float maxScale = 1f;
         private GameObject currentSpecialAttack;
         private Rigidbody rbCurrentSpecialAttack;
         private bool r2Triggered;
@@ -169,6 +172,19 @@ namespace Player
         {
             if (!CanMove) return;
             CheckGrounded();
+
+            // Verificar si el personaje está en el aire y se debe disparar
+            if (!isGrounded && isShootingInAir)
+            {
+                movement = Vector2.zero;
+                isShooting = true;
+                animator.SetTrigger("shoot");
+
+                // Iniciar la animación de disparo y esperar a que termine antes de continuar
+                shootCoroutine = StartCoroutine(ShootAndWait());
+                
+                isShootingInAir = false; // Reiniciar la bandera para evitar disparos continuos en el aire
+            }
         }
 
         private void FixedUpdate()
@@ -182,7 +198,7 @@ namespace Player
             if (!CanMove) return;
             animator.SetFloat("speed", movement.magnitude);
             animator.SetBool("walk", movement.magnitude > 0f);
-            animator.SetBool("jump", isJumping);
+            animator.SetBool("jump", isJumping && !isShooting);
             animator.SetBool("land", isGrounded);
         }
         
@@ -226,14 +242,15 @@ namespace Player
             if (!CanMove || isShootCooldown) return;
             isShootCooldown = true;
 
-            if (isGrounded)
-            {
+            //if (isGrounded)
+            //{
                 movement = Vector2.zero;
+                isShooting = true;
                 animator.SetTrigger("shoot");
                 StartCoroutine(nameof(Shoot));
                 
                 StartCoroutine(ShootCooldownTimer());
-            }
+            //}
         }
         
         private IEnumerator ShootCooldownTimer()
@@ -249,6 +266,24 @@ namespace Player
             MyAudioManager.Instance.PlaySfx("fireVoice");
 
             Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
+            
+            isShooting = false;
+        }
+        
+        private IEnumerator ShootAndWait()
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            MyAudioManager.Instance.PlaySfx("fireVoice");
+
+            Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
+            
+            isShooting = false;
+
+            // Esperar a que termine la animación de disparo antes de reactivar los controles
+            yield return new WaitForSeconds(0.5f);
+
+            shootCoroutine = null;
         }
         
         #endregion
@@ -276,9 +311,19 @@ namespace Player
                 isJumping = true;
                 isGrounded = false;
 
-                //rb.AddForce(Vector3.up, ForceMode.Impulse);
-                
-                rb.velocity = new Vector3(rb.velocity.x, Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), rb.velocity.z);
+                float jumpForce = Mathf.Sqrt(2f * jumpHeight * gravity);
+                rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+            }
+            
+            // Verificar si se debe disparar en el aire
+            if (isShooting)
+            {
+                isShootingInAir = true;
+                isShooting = false;
+
+                // Detener la rutina de disparo si está en progreso
+                if (shootCoroutine != null)
+                    StopCoroutine(shootCoroutine);
             }
         }
     
@@ -472,7 +517,6 @@ namespace Player
         {
             Dragon.GetComponent<Transform>().position = position;
             Dragon.SetActive(true);
-            Dragon.transform.LookAt(transform);
             Dragon.transform.DOMoveY(transform.position.y, 2).SetEase(Ease.Linear).Play();
         }
     }
