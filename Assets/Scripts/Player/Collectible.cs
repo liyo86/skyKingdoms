@@ -42,7 +42,7 @@ public class Collectible : MonoBehaviour
     private void Collect()
     {
         if (collectSound)
-            AudioSource.PlayClipAtPoint(collectSound, transform.position);
+            MyAudioManager.Instance.PlaySfx("levelCompleteSFX");
         if (collectEffect)
             Instantiate(collectEffect, transform.position, Quaternion.identity);
 

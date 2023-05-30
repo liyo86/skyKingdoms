@@ -38,7 +38,7 @@ public class EnemySpawner : MonoBehaviour
                 
                 foreach (Collider hit in hitColliders)
                 {
-                    if (hit.CompareTag(nameof(Tree)) && !treePositions.ContainsKey(hit.transform.position))
+                    if (hit.CompareTag(nameof(Tree)) && !treePositions.ContainsKey(hit.transform.position) && !hit.CompareTag(Constants.PLATFORM_TAG))
                     {
                         treePositions.Add(hit.transform.position, true);
                         float minX = Random.Range(1, minTreeDistance);

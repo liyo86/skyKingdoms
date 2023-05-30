@@ -472,7 +472,6 @@ namespace Player
         {
             Dragon.GetComponent<Transform>().position = position;
             Dragon.SetActive(true);
-            Dragon.transform.LookAt(transform);
             Dragon.transform.DOMoveY(transform.position.y, 2).SetEase(Ease.Linear).Play();
         }
     }
