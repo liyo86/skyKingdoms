@@ -230,8 +230,4 @@ public class MazeGenerator : MonoBehaviour //Hunt-and-Kill algorithm
         return neighbours;
     }
     
-    public void LevelComplete()
-    {
-        sceneManager.LoadScene();   
-    }
 }

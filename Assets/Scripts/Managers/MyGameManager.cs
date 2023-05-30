@@ -86,7 +86,7 @@ public class MyGameManager : MonoBehaviour
                 FlightLevel.Instance.LevelComplete();
                 break;
             case Collectible.CollectibleTypes.GemRed:
-                MazeGenerator.Instance.LevelComplete();
+                Debug.Log("Roja conseguida");
                 break;
             case Collectible.CollectibleTypes.GemGreen:
                 Debug.Log("Verde conseguida");

@@ -472,6 +472,7 @@ namespace Player
         {
             Dragon.GetComponent<Transform>().position = position;
             Dragon.SetActive(true);
+            Dragon.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             Dragon.transform.DOMoveY(transform.position.y, 2).SetEase(Ease.Linear).Play();
         }
     }
