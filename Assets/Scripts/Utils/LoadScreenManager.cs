@@ -35,12 +35,13 @@ public class LoadScreenManager : MonoBehaviour
 
     public void LoadScene(string name = "null")
     {
+        MyGameManager.Instance.isLoading = true;
+        
         if (name != "null")
             sceneName = name;
         
         if (!isLoading)
         {
-            MyGameManager.Instance.isLoading = true;
             isLoading = true;
             StartCoroutine(LoadScreenCoroutine());
             Invoke(nameof(TimeElapsed), minLoadTime);

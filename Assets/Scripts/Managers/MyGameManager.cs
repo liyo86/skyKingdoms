@@ -98,7 +98,7 @@ public class MyGameManager : MonoBehaviour
     #region GAME OVER
     public void GameOver()
     {
-        if (isLoading) return;
+        if (isLoading) return; //TODO meter pequeño delay
         
         if (!gameOver)
         {
@@ -124,14 +124,6 @@ public class MyGameManager : MonoBehaviour
     public void RestartLevel()
     {
         playerCanvasAnimator.SetTrigger("continue");
-    }
-    
-    public void LevelComplete()
-    {
-        if (!gameOver)
-        {
-
-        }   
     }
     #endregion
 

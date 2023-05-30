@@ -186,7 +186,7 @@ MonoBehaviour:
   ringSFX: {fileID: 8300000, guid: ceede7a829d41470a86526620500b878, type: 3}
   bossAttack1SFX: {fileID: 8300000, guid: 7743889c22ea9472a895ecd63b2bb221, type: 3}
   gameOverSFX: {fileID: 8300000, guid: 2f07c3b7706a64f489133201c2342886, type: 3}
-  levelCompleteSFX: {fileID: 8300000, guid: 14e15f75ff87846e18aa9ba0845c8a96, type: 3}
+  levelCompleteSFX: {fileID: 8300000, guid: aa348f776c7354f36917fef10c6b48d1, type: 3}
   fireVoice: {fileID: 8300000, guid: 851a7940556fe4673bb01f3a31dcd7ac, type: 3}
   defenseVoice: {fileID: 8300000, guid: ae473f9c0729c4dd793aa9079670d4f9, type: 3}
 --- !u!1 &7115728694317078526
