@@ -22,6 +22,8 @@ public class GhostMazeAI : MonoBehaviour
 
     private void Update()
     {
+        if (!BoyController.Instance.CanMove) return;
+        
         if (!isChasing)
         {
             Patrol();

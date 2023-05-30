@@ -43,6 +43,30 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1290717245, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
+      propertyPath: m_Size.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290717245, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
+      propertyPath: m_Size.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290717245, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
+      propertyPath: m_Size.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290717245, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290717245, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
+      propertyPath: m_Center.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290717245, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290717245, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 13400000, guid: 844fd91b9d05b497b94f9ec8a9c779cd, type: 2}
@@ -52,7 +76,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1290717246, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1290717246, guid: b4adac73bd7f440a0879d68772c86fd1, type: 3}
       propertyPath: jumpHeight
@@ -272,19 +296,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6357075458587463484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d5adf8c95f37437a842ca252af01a38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plantCount: 5
   moveSpeed: 1.5
-  jumpForce: 2
+  jumpForce: 7
   spellPrefab: {fileID: 121802, guid: 8f18e1d8c46c51f429429815455062fc, type: 3}
   spellSpawn: {fileID: 4153648564898765187}
   defenseCooldown: 5
   specialAttackCooldown: 15
   shootCooldown: 2
-  isDefenseCooldown: 0
-  isSpecialAttackCooldown: 0
-  isShootCooldown: 0

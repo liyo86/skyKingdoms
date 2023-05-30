@@ -988,10 +988,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2157593042592591428}
     - target: {fileID: 2995027492041135828, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2995027492041135828, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: sceneManager
       value: 
       objectReference: {fileID: 1078283452}
@@ -1011,14 +1007,6 @@ PrefabInstance:
       propertyPath: specialAttackImage
       value: 
       objectReference: {fileID: 948004847}
-    - target: {fileID: 2995027492720414748, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
-      propertyPath: jumpForce
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2995027492720414748, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6013166275688519046, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -1066,10 +1054,6 @@ PrefabInstance:
     - target: {fileID: 6357075458587463484, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8420283816232362175, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}

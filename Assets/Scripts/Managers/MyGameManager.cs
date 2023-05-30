@@ -14,6 +14,7 @@ public class MyGameManager : MonoBehaviour
     public GameObject menuGameOver;
     public Animator playerCanvasAnimator;
     public bool gameOver;
+    public bool isLoading;
     #endregion
     
     #region UNITY METHODS
@@ -97,6 +98,8 @@ public class MyGameManager : MonoBehaviour
     #region GAME OVER
     public void GameOver()
     {
+        if (isLoading) return;
+        
         if (!gameOver)
         {
             gameOver = true;

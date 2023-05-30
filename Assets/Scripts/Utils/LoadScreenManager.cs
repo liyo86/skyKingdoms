@@ -30,6 +30,7 @@ public class LoadScreenManager : MonoBehaviour
             LoadScene();
         }
 
+        MyGameManager.Instance.isLoading = false;
     }
 
     public void LoadScene(string name = "null")
@@ -39,6 +40,7 @@ public class LoadScreenManager : MonoBehaviour
         
         if (!isLoading)
         {
+            MyGameManager.Instance.isLoading = true;
             isLoading = true;
             StartCoroutine(LoadScreenCoroutine());
             Invoke(nameof(TimeElapsed), minLoadTime);
