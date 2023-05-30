@@ -32,7 +32,7 @@ public class Collectible : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                Vector3 dragonPosition = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z + 5f);
+                Vector3 dragonPosition = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
                 BoyController.Instance.ShowDragon(dragonPosition);
             }
             Collect();
