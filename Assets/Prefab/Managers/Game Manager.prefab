@@ -717,6 +717,8 @@ MonoBehaviour:
   menuGameOver: {fileID: 6830977210877638949}
   playerCanvasAnimator: {fileID: 7522637257457119513}
   gameOver: 0
+  isLoading: 0
+  AIDemoControl: 0
 --- !u!1 &2064408677653932250
 GameObject:
   m_ObjectHideFlags: 0

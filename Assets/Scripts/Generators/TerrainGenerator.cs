@@ -141,7 +141,8 @@ namespace Generators
                 {
                     if (!hit.CompareTag("Mountain") && 
                         !hit.CompareTag("Water") &&
-                        !hit.CompareTag("Dragon"))
+                        !hit.CompareTag("Dragon") &&
+                        !hit.CompareTag("Tree"))
                     {
                         Instantiate(treePrefab, pos, Quaternion.identity);
                     }

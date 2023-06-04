@@ -1,5 +1,6 @@
 ﻿using Player;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(AudioSource))]
 public class Collectible : MonoBehaviour
@@ -33,8 +34,12 @@ public class Collectible : MonoBehaviour
             if (other.CompareTag("Player"))
             {
                 Vector3 dragonPosition = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z);
-                BoyController.Instance.ShowDragon(dragonPosition);
+                if(!MyGameManager.Instance.AIDemoControl)
+                    BoyController.Instance.ShowDragon(dragonPosition);
+                else
+                    SceneManager.LoadScene("Menu_game");
             }
+            
             Collect();
         }
     }

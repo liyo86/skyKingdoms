@@ -475,6 +475,7 @@ namespace Player
             else if (other.CompareTag("Enemy") && !_damaged && !isDefending)
             {
                 _damaged = true;
+                Debug.Log("Entro y añado daño");
                 PlayerHealth.Instance.AddDamage(10);
                 StartCoroutine(Damaged(other.transform.position));
                 animator.SetTrigger("damage");

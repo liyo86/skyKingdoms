@@ -1,5 +1,3 @@
-using System.Collections;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -29,7 +27,6 @@ public class Menu_ReintentarUI : InputsUI
     private void RestartScene()
     {
         menuCanvas.SetActive(false);
-            
-        sceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
