@@ -302,7 +302,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1.5
-  jumpForce: 7
+  jumpForce: 8
+  jumpForwardForce: 5
   spellPrefab: {fileID: 121802, guid: 8f18e1d8c46c51f429429815455062fc, type: 3}
   spellSpawn: {fileID: 4153648564898765187}
   defenseCooldown: 5

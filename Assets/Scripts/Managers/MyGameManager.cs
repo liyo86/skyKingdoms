@@ -1,4 +1,5 @@
 using System.Collections;
+using AI.Player_Controller;
 using Managers;
 using Player;
 using UnityEngine;
@@ -7,14 +8,17 @@ using UnityEngine.SceneManagement;
 public class MyGameManager : MonoBehaviour
 {
     #region VARIABLES
-    public static MyGameManager Instance;
-    
+
+    public static MyGameManager Instance { get; private set; }
+
     public GameObject GameOverCanvas;
     public GameObject animationGameOver;
     public GameObject menuGameOver;
     public Animator playerCanvasAnimator;
     public bool gameOver;
     public bool isLoading;
+    public bool AIDemoControl;
+
     #endregion
     
     #region UNITY METHODS
@@ -23,21 +27,17 @@ public class MyGameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
     }
-
-    void Start()
-    {
-        Init();
-    }
     #endregion
     
     #region INIT CONFIGURATION
-    void Init()
+    public void Init()
     {
         string sceneName = SceneManager.GetActiveScene().name;
 
@@ -49,6 +49,15 @@ public class MyGameManager : MonoBehaviour
             case "Level1":
                 MyAudioManager.Instance.PlayMusic("dayAmbient");
                 MyLevelManager.Instance.Level1();
+               
+                GameObject Player = GameObject.FindWithTag(Constants.PLAYER);
+                if (Player == null) return;
+        
+                if (AIDemoControl)
+                {
+                    Player.GetComponent<BoyController>().enabled = false;
+                    Player.GetComponent<AIController>().enabled = true;
+                }
                 break;
             case "Level2":
                 MyAudioManager.Instance.PlayMusic("dungeon");
@@ -86,7 +95,7 @@ public class MyGameManager : MonoBehaviour
                 FlightLevel.Instance.LevelComplete();
                 break;
             case Collectible.CollectibleTypes.GemRed:
-                MazeGenerator.Instance.LevelComplete();
+                Debug.Log("Roja conseguida");
                 break;
             case Collectible.CollectibleTypes.GemGreen:
                 Debug.Log("Verde conseguida");
@@ -98,7 +107,7 @@ public class MyGameManager : MonoBehaviour
     #region GAME OVER
     public void GameOver()
     {
-        if (isLoading) return;
+        if (isLoading) return; //TODO meter pequeño delay
         
         if (!gameOver)
         {
@@ -124,14 +133,6 @@ public class MyGameManager : MonoBehaviour
     public void RestartLevel()
     {
         playerCanvasAnimator.SetTrigger("continue");
-    }
-    
-    public void LevelComplete()
-    {
-        if (!gameOver)
-        {
-
-        }   
     }
     #endregion
 

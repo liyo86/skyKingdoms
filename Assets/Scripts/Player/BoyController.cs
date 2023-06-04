@@ -475,6 +475,7 @@ namespace Player
             else if (other.CompareTag("Enemy") && !_damaged && !isDefending)
             {
                 _damaged = true;
+                Debug.Log("Entro y añado daño");
                 PlayerHealth.Instance.AddDamage(10);
                 StartCoroutine(Damaged(other.transform.position));
                 animator.SetTrigger("damage");
@@ -517,6 +518,7 @@ namespace Player
         {
             Dragon.GetComponent<Transform>().position = position;
             Dragon.SetActive(true);
+            Dragon.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             Dragon.transform.DOMoveY(transform.position.y, 2).SetEase(Ease.Linear).Play();
         }
     }

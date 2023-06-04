@@ -31,16 +31,19 @@ public class LoadScreenManager : MonoBehaviour
         }
 
         MyGameManager.Instance.isLoading = false;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     public void LoadScene(string name = "null")
     {
+        MyGameManager.Instance.isLoading = true;
+        
         if (name != "null")
             sceneName = name;
         
         if (!isLoading)
         {
-            MyGameManager.Instance.isLoading = true;
             isLoading = true;
             StartCoroutine(LoadScreenCoroutine());
             Invoke(nameof(TimeElapsed), minLoadTime);
@@ -55,7 +58,7 @@ public class LoadScreenManager : MonoBehaviour
 
         while(!async.isDone)
         {
-            loadedImg.fillAmount = async.progress / 0.9f; // Trabajamos en 0 -> 0.9 porque 'progress' llega como máximo a 0.9f
+            loadedImg.fillAmount = async.progress / 0.9f;
             loadedText.text = $"{(int)(loadedImg.fillAmount * 100f)}%";
             if(async.progress >= 0.9f && minTimeElapsed)
             {
@@ -70,5 +73,10 @@ public class LoadScreenManager : MonoBehaviour
     private void TimeElapsed()
     {
         minTimeElapsed = true;
+    }
+    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        MyGameManager.Instance.Init();
     }
 }

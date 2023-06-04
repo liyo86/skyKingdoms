@@ -1,5 +1,3 @@
-using System.Collections;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -12,7 +10,7 @@ public class Menu_ReintentarUI : InputsUI
         switch (actualOption)
         {
             case 0:
-                StartCoroutine(nameof(WaitUntilRestart));
+                RestartLevel();
                 break;
             case 1:
                 sceneManager.LoadScene("Menu_game");
@@ -20,14 +18,15 @@ public class Menu_ReintentarUI : InputsUI
         }
     }
 
-    private IEnumerator WaitUntilRestart()
+    private void RestartLevel()
     {
-        MyGameManager.Instance.RestartLevel();
-        
-        yield return new WaitForSeconds(1f);
-        
+        MyGameManager.Instance.RestartLevel();   
+        Invoke(nameof(RestartScene), 1f);
+    }
+
+    private void RestartScene()
+    {
         menuCanvas.SetActive(false);
-            
-        sceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
