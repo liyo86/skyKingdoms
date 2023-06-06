@@ -8,6 +8,7 @@ namespace AI.Player_Controller
     [RequireComponent(typeof(Rigidbody))]
     public class AIController : MonoBehaviour, IAttackCooldown
     {
+        #region VARIABLES
         public bool IsDefenseCooldown => isDefenseCooldown;
         public float DefenseCooldown => defenseCooldown;
         public bool IsShootCooldown => isShootCooldown;
@@ -37,6 +38,7 @@ namespace AI.Player_Controller
         
         private int currentPlatformIndex = 0; // Índice de la plataforma actual
         private bool isJumping = false; // Indicador si el personaje está saltando
+        private bool hasJumpedToGem;
         private bool isGrounded = true;
 
         private bool isDefenseCooldown = false;
@@ -50,6 +52,11 @@ namespace AI.Player_Controller
         private float randomAngle;
         private Vector3 direction;
         private GameObject actualPlant;
+        
+        private float noMovementTime = 0f;
+        private const float noMovementThreshold = 0.1f;
+        private const float evadeObstacleTimeThreshold = 1f;
+        #endregion
 
         #region UNITY METHODS
         private void Awake()
@@ -66,69 +73,13 @@ namespace AI.Player_Controller
         private void Update()
         {
             if (isAttacking) canMove = false;
+            
             if (plants == null || plants.Length == 0 || isAttacking || isChangingDirection)
                 return;
-
-            if (MyLevelManager.Instance.enemyCount < 5)
-            {
-                actualPlant = GetClosestPlant();
-
-                if (actualPlant != null)
-                {
-                    // Mover hacia la planta más cercana
-                    direction = (actualPlant.transform.position - transform.position).normalized;
-                    transform.LookAt(actualPlant.transform);
-
-                    Move();
-                    
-                    // Disparar si tengo la planta cerca
-                    if (Vector3.Distance(transform.position, actualPlant.transform.position) <= 5f)
-                    {
-                        if(canAttack)
-                            Attack();
-                    }
-                }
-            }
-            else if (MyLevelManager.Instance.enemyCount >= 5)
-            {
-                gem = GameObject.FindGameObjectWithTag(Constants.GEM_TAG);
-                if (gem == null) return;
-
-                // Mover hacia la primera plataforma
-                GameObject closestPlatform = GetClosestPlatform();
-
-                if (closestPlatform != null)
-                {
-                    // Mover hacia la plataforma más cercana
-                    direction = (closestPlatform.transform.position - transform.position).normalized;
-                    transform.LookAt(closestPlatform.transform);
-
-                    Move();
-                    
-                    // Salto si tengo la plataforma cerca
-                    if (Vector3.Distance(transform.position, closestPlatform.transform.position) <= 4f)
-                    {
-                        if (isJumping) return;
-                        Jump();
-                        currentPlatformIndex++; // Incrementar el índice de la plataforma actual
-                    }
-                }
-                else
-                {
-                    // No hay más plataformas, mover hacia la gema
-                    if (gem != null)
-                    {
-                        direction = (gem.transform.position - transform.position).normalized;
-                        transform.LookAt(gem.transform);
-
-                        if (Vector3.Distance(transform.position, gem.transform.position) <= 1f)
-                        {
-                            if (isJumping) return;
-                            Jump();
-                        }
-                    }
-                }
-            }
+            
+            CheckNoMovementWhileWalking();
+            
+            CheckStates();
         }
         
         private void FixedUpdate()
@@ -139,12 +90,8 @@ namespace AI.Player_Controller
             if (canMove)
             {
                 rb.MovePosition(rb.position + direction * moveSpeed * Time.deltaTime);
-                //rb.AddForce(direction * moveSpeed, ForceMode.VelocityChange);
-                
-                if (isChangingDirection)
-                {
-                    rb.rotation = Quaternion.LookRotation(direction);
-                }
+
+                rb.rotation = Quaternion.LookRotation(direction);
             }
             else
             {
@@ -161,7 +108,7 @@ namespace AI.Player_Controller
         }
         #endregion
         
-        #region CONFIGURATION
+        #region IA CONFIGURATION
         private IEnumerator CanStart()
         {
             yield return new WaitForSeconds(1f);
@@ -209,12 +156,14 @@ namespace AI.Player_Controller
             return platforms[currentPlatformIndex];
         }
         
-
         private void Move()
         {
             canMove = true;
             canAttack = true;
+        }
 
+        private void CheckObstacle()
+        {
             RaycastHit hit;
             
             if (Physics.SphereCast(transform.position, 0.5f, direction, out hit, 3f))
@@ -237,6 +186,26 @@ namespace AI.Player_Controller
             }
         }
         
+        private void CheckNoMovementWhileWalking()
+        {
+            if (canMove)
+            {
+                if (rb.velocity.magnitude < noMovementThreshold)
+                {
+                    noMovementTime += Time.deltaTime;
+                }
+                else
+                {
+                    noMovementTime = 0f;
+                }
+            }
+
+            if (noMovementTime > evadeObstacleTimeThreshold)
+            {
+                CheckObstacle();
+            }
+        }
+        
         private IEnumerator EvadeObstacle(Vector3 obstaclePosition)
         {
             isChangingDirection = true;
@@ -254,6 +223,99 @@ namespace AI.Player_Controller
         }
         
         #endregion
+        
+        #region IA STATES
+
+        private void CheckStates()
+        {
+            if (MyLevelManager.Instance.enemyCount < 5)
+            {
+                DefeatFlowerState();
+            }
+            else if (MyLevelManager.Instance.enemyCount >= 5)
+            {
+                GetGemState();
+            }
+        }
+
+        private void DefeatFlowerState()
+        {
+            actualPlant = GetClosestPlant();
+
+            if (actualPlant != null)
+            {
+                // Mover hacia la planta más cercana
+                direction = (actualPlant.transform.position - transform.position).normalized;
+
+                Move();
+                
+                CheckObstacle();
+                    
+                // Disparar si tengo la planta cerca
+                if (Vector3.Distance(transform.position, actualPlant.transform.position) <= 5f)
+                {
+                    if(canAttack)
+                        Attack();
+                }
+            }
+        }
+
+        private void GetGemState()
+        {
+            gem = GameObject.FindGameObjectWithTag(Constants.GEM_TAG);
+            if (gem == null) return;
+
+            // Mover hacia la primera plataforma
+            GameObject closestPlatform = GetClosestPlatform();
+
+            if (closestPlatform != null)
+            {
+                // Mover hacia la plataforma más cercana
+                direction = (closestPlatform.transform.position + closestPlatform.transform.up * 0.5f - transform.position).normalized;
+                
+                Move();
+                
+                CheckObstacle();
+                    
+                // Salto si tengo la plataforma cerca
+                if (Vector3.Distance(transform.position, closestPlatform.transform.position) <= 5f)
+                {
+                    if (isJumping) return;
+                    
+                    Jump();
+                    StartCoroutine(nameof(WaitForNextPlatform));
+                }
+            }
+            else
+            {
+                if (hasJumpedToGem) return;
+             
+                if (gem != null)
+                {
+                    if (isJumping) return;
+                    StartCoroutine(nameof(WaitAndJumpToGem));
+                }
+            }
+        }
+
+        private IEnumerator WaitForNextPlatform()
+        {
+            yield return new WaitForSeconds(1f);
+            currentPlatformIndex++;
+        }
+
+        private IEnumerator WaitAndJumpToGem()
+        {
+            yield return new WaitForSeconds(1f);
+            
+            hasJumpedToGem = true;
+            
+            //canMove = false;
+            
+            rb.AddForce(Vector3.up, ForceMode.Impulse);
+        }
+        
+        #endregion
 
         #region ACTIONS
         private void Jump()
@@ -262,13 +324,11 @@ namespace AI.Player_Controller
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             
-            Vector3 forwardDirection = transform.forward.normalized;
-            
-            rb.AddForce(forwardDirection * jumpForwardForce, ForceMode.Impulse);
+            rb.MovePosition(rb.position + direction * moveSpeed * Time.deltaTime);
 
             isGrounded = false;
             
-            Invoke("ResetJump", 1f);
+            Invoke(nameof(ResetJump), 1f);
         }
 
         private void ResetJump()
@@ -313,6 +373,8 @@ namespace AI.Player_Controller
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!this.isActiveAndEnabled) return;
+            
             if (other.CompareTag(Constants.ENEMY_TAG))
             {
                 PlayerHealth.Instance.AddDamage(10);

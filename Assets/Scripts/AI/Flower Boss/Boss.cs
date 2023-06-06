@@ -8,7 +8,6 @@ public class Boss : MonoBehaviour
     
     [Header("Tags Necesarios:\n" +
             "Player: Transform del Player.\n" +
-            "WayPoint: Transform de cada punto de platrulla.\n" +
             "PlayerInitialPosition: Transform de destino del Player\n si hay game over.\n\n")]
     
     [SerializeField]
@@ -61,7 +60,7 @@ public class Boss : MonoBehaviour
     
     private Rigidbody _playerRB;
 
-    private Rigidbody bossRigidbody;
+    public Rigidbody bossRigidbody;
 
     private Vector2 _direction;
 
@@ -73,12 +72,8 @@ public class Boss : MonoBehaviour
     }
 
     #endregion
-
-    public static Boss Instance;
-    public float _timeBetweenJumps; // Tiempo entre saltos (segundos)
-    private float _jumpTimer; // Temporizador para el salto
-    public float jumpForce;
-    private ParticleSystem shockWaveParticle;
+    
+    public ParticleSystem shockWaveParticle;
     private Vector3 originalPosition;
     public GameObject AttackPhase1;
     private bool gameOver;
@@ -88,7 +83,6 @@ public class Boss : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
         bossRigidbody = GetComponent<Rigidbody>();
         shockWaveParticle = GetComponentInChildren<ParticleSystem>();
     }
@@ -132,33 +126,7 @@ public class Boss : MonoBehaviour
         }
     }
     
-    public void JumpAndCreateShockwave()
-    {
-        _jumpTimer += Time.deltaTime;
-
-        if (_jumpTimer >= _timeBetweenJumps)
-        { 
-            bossRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            StartCoroutine(WaitAndShoot());
-            _jumpTimer = 0;
-        }
-       
-    }
-
-    private IEnumerator WaitAndShoot()
-    {
-        yield return new WaitForSeconds(0.5f);
-        
-        if(shockWaveParticle != null)
-            shockWaveParticle.Play();
-        
-        MyAudioManager.Instance.PlaySfx("bossAttack1SFX");
-        
-        Vector3 attackOnePosition = new Vector3(transform.position.x, UnityEngine.Random.Range(0f, 2f), transform.position.z - 6);
-        
-        Instantiate(AttackPhase1, attackOnePosition, Quaternion.identity);
-    }
-
+    
     void GameOver()
     {
         if (gameOver) return;

@@ -465,49 +465,54 @@ namespace Player
 
         #endregion
         
-        // SACAR FUERA DE ESTE SCRIPT
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Dragon"))
             {
                 sceneManager.LoadScene();
             }
-            else if (other.CompareTag("Enemy") && !_damaged && !isDefending)
+            else if (other.CompareTag("Limit"))
+            {
+                MyGameManager.Instance.GameOver();
+            }
+
+            if (isDefending) return;
+            
+            if (other.CompareTag("Enemy") && !_damaged)
             {
                 _damaged = true;
-                Debug.Log("Entro y añado daño");
                 PlayerHealth.Instance.AddDamage(10);
                 StartCoroutine(Damaged(other.transform.position));
                 animator.SetTrigger("damage");
             } 
-            else if (other.CompareTag("BossAttack1") && !_damaged && !isDefending)
+            else if (other.CompareTag("BossAttack1") && !_damaged)
             {
                 _damaged = true;
                 PlayerHealth.Instance.AddDamage(25);
                 StartCoroutine(Damaged(other.transform.position));
                 animator.SetTrigger("damage");
             }
-            else if (other.CompareTag("Bat") && !_damaged && !isDefending)
+            else if (other.CompareTag("Bat") && !_damaged)
             {
                 _damaged = true;
                 PlayerHealth.Instance.AddDamage(30);
                 StartCoroutine(Damaged(other.transform.position));
                 animator.SetTrigger("damage");
-            } 
-            else if (other.CompareTag("Limit"))
-            {
-                MyGameManager.Instance.GameOver();
             }
+
+            if (_damaged) StartCoroutine(nameof(DamagedCoolDown));
         }
 
-        private void OnTriggerExit(Collider other)
+        private IEnumerator DamagedCoolDown()
         {
+            yield return new WaitForSeconds(1f);
             _damaged = false;
+
         }
 
-        IEnumerator Damaged(Vector3 enemyPos)
+        // Recoil
+        private IEnumerator Damaged(Vector3 enemyPos)
         {
-            // Recoil
             Vector3 recoilDirection = (transform.position - enemyPos).normalized;
             rb.AddForce(recoilDirection * 20f, ForceMode.Impulse);
 
