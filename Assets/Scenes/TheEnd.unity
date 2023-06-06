@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.13944408, g: 0.35896093, b: 0.6964214, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1736,7 +1736,7 @@ GameObject:
   - component: {fileID: 920855210}
   - component: {fileID: 920855209}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Princess Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2816,7 +2816,7 @@ GameObject:
   - component: {fileID: 1997762617}
   - component: {fileID: 1997762618}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Credits Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

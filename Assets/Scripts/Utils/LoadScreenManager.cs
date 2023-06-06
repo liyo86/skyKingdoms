@@ -29,6 +29,10 @@ public class LoadScreenManager : MonoBehaviour
         {
             LoadScene();
         }
+        else
+        {
+            MyGameManager.Instance.Init();
+        }
 
         MyGameManager.Instance.isLoading = false;
 

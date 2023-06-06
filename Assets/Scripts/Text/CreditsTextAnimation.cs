@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class CreditsTextAnimation : MonoBehaviour
 {
@@ -34,6 +36,18 @@ public class CreditsTextAnimation : MonoBehaviour
             sequence.Append(child.GetComponent<CanvasGroup>().DOFade(1f, fadeInDuration));
             sequence.Append(child.transform.DOLocalMoveY(child.transform.localPosition.y + moveDistance, moveDuration));
             sequence.Append(child.GetComponent<CanvasGroup>().DOFade(0f, fadeOutDuration));
+            
+            if (i == transform.childCount - 1)
+            {
+                sequence.AppendCallback(() => StartCoroutine(BackToMenu()));
+            }
         }
+    }
+
+    private IEnumerator BackToMenu()
+    {
+        yield return new WaitForSeconds(5f);
+        
+        SceneManager.LoadScene("Menu_game");
     }
 }

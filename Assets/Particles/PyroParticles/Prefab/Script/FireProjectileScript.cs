@@ -34,7 +34,7 @@ namespace DigitalRuby.PyroParticles
         public float ProjectileColliderDelay = 0.0f;
 
         [Tooltip("The speed of the collider.")]
-        public float ProjectileColliderSpeed = 450.0f;
+        public float ProjectileColliderSpeed = 650.0f;
 
         [Tooltip("The direction that the collider will go. For example, flame strike goes down, and fireball goes forward.")]
         public Vector3 ProjectileDirection = Vector3.forward;
