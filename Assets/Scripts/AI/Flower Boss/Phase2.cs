@@ -6,7 +6,7 @@ public class Phase2 : FSMBoss
 {
     private Vector3 originalPosition;
     private bool isFuryMode = false;
-    private float jumpDuration = 2;
+    private float jumpDuration = 2f;
     private int jumpCount = 3; // Cantidad de saltos consecutivos
     private float jumpHeight = 2f; // Altura de cada salto
     private float waitTime = 2f; // Tiempo de espera después de tocar al jugador
@@ -18,6 +18,7 @@ public class Phase2 : FSMBoss
     {
         Vector3 targetPosition = BoyController.Instance.transform.position;
         agent.transform.LookAt(targetPosition);
+        
         FuryMode(agent.transform, targetPosition);
 
         if (HasCollidedWithPlayer(agent.transform))
@@ -59,7 +60,7 @@ public class Phase2 : FSMBoss
     {
         targetTransform.DOJump(originalPosition, jumpHeight, jumpCount, jumpDuration)
             .SetEase(Ease.InOutQuad)
-            .OnComplete(() => WaitBeforeContinuing())
+            .OnComplete(WaitBeforeContinuing)
             .SetId(targetTransform);
     }
 
@@ -69,6 +70,7 @@ public class Phase2 : FSMBoss
         {
             isFuryMode = false;
             targetTransform.DOKill();
+            targetTransform.position = originalPosition;
         }
     }
 

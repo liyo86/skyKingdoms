@@ -173,8 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treeThreshold: 1
-  waterThreshold: 0.3
-  minTreeDistance: 3
+  minTreeDistance: 6
   enemyPrefab: {fileID: 753785460207422148, guid: ff47f444dbf93a1439d5b3c923b4e157, type: 3}
   terrainLayer:
     serializedVersion: 2
@@ -1611,6 +1610,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2157593042592591428}
     - target: {fileID: 2995027492041135828, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2995027492041135828, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: sceneManager
       value: 
       objectReference: {fileID: 1078283452}
@@ -1630,6 +1633,10 @@ PrefabInstance:
       propertyPath: specialAttackImage
       value: 
       objectReference: {fileID: 948004847}
+    - target: {fileID: 2995027492720414748, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6013166275688519046, guid: b5d235dd4ab7f493383e808a310d7dfc, type: 3}
       propertyPath: m_RootOrder
       value: 9

@@ -102,7 +102,6 @@ public class FlowerBossHealth : MonoBehaviour
 
         transform.DOScale(new Vector3(0, 0, 0), deathDuration).SetEase(Ease.InFlash).OnComplete(() =>
         {
-            //gameObject.SetActive(false);
             Destroy(gameObject);
         }).Play();
     }

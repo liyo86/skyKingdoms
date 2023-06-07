@@ -41,7 +41,7 @@ public class GoblinBossHealth : MonoBehaviour
             GameOver();
     }
     
-    void AddDamage(int damage)
+    public void AddDamage(int damage)
     {
         currentHealth -= damage;
 
@@ -84,7 +84,7 @@ public class GoblinBossHealth : MonoBehaviour
         if (other.CompareTag("Fire"))
         {
             AddDamage(10);
-        }
+        } 
     }
     
     void Die()
