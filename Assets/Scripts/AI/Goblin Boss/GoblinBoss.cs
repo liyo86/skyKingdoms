@@ -10,7 +10,7 @@ public class GoblinBoss : MonoBehaviour
     public GameObject Bat;
     public Transform batOriginalPosition; // Posición original del bat
     public float speed; // Velocidad de movimiento del enemigo
-    public float batSpeed; // Tiempo que tarda el arma en llegar al jugador
+    public float batSpeed; // Tiempo que tarda el arma en llegar al player
     public float batReturnSpeed; // Tiempo que tarda el arma en regresar a la mano
     public float chaseDuration; // Duración de la persecución
     public float restDuration; // Duración del descanso
@@ -35,30 +35,18 @@ public class GoblinBoss : MonoBehaviour
     private void Start()
     {
         MyAudioManager.Instance.PlayMusic("finalBoss");
+        Bat.transform.position = batOriginalPosition.position;
         transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         fight = true;
         StartChase();
     }
 
+    
     private void Update()
-    {
-        if (!fight) return;
+{
+    if (!fight) return;
 
-        if (isAttacking)
-        {
-            AttackState();
-        }
-        else if (!isResting)
-        {
-            ChaseState();
-        }
-        else if (isResting)
-        {
-            RestState();
-        }
-    }
-
-    private void AttackState()
+    if (isAttacking)
     {
         if (!isBatReturning)
         {
@@ -68,11 +56,13 @@ public class GoblinBoss : MonoBehaviour
             {
                 if (BoyController.Instance.IsDefending)
                 {
-                    Destroy(Bat); // Destruir el bate si el jugador se defiende exitosamente
+                    Bat.transform.position = batOriginalPosition.position;
+                    Bat.transform.rotation = Quaternion.Euler(0f, 0, 50f);
                     isAttacking = false;
-                    isBatReturning = true;
+                    isBatReturning = false;
                     StartRest();
-                    GoblinBossHealth.Instance.AddDamage(30);
+
+                    //GoblinBossHealth.Instance.AddDamage(30);
                 }
                 else
                 {
@@ -86,29 +76,23 @@ public class GoblinBoss : MonoBehaviour
 
             if (Vector3.Distance(Bat.transform.position, batOriginalPosition.position) <= 0.5f)
             {
+                isAttacking = false;
                 isBatReturning = false;
                 StartRest();
             }
         }
     }
-
-    private void RestState()
+    else if (!isResting)
     {
-        restTimer -= Time.deltaTime;
-        if (restTimer <= 0f)
-        {
-            StartChase();
-        }
-    }
+        Bat.transform.position = batOriginalPosition.position;
+        Bat.transform.rotation = Quaternion.Euler(0f, 0, 50f);
 
-    private void ChaseState()
-    {
         if (target != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             transform.LookAt(target);
 
-            if (!isAttacking && Vector3.Distance(transform.position, target.position) <= visionRange)
+            if (Vector3.Distance(transform.position, target.position) <= visionRange)
             {
                 StartAttack();
             }
@@ -120,6 +104,18 @@ public class GoblinBoss : MonoBehaviour
             StartRest();
         }
     }
+    else if (isResting)
+    {
+        Bat.transform.position = batOriginalPosition.position;
+        Bat.transform.rotation = Quaternion.Euler(0f, 0, 50f);
+
+        restTimer -= Time.deltaTime;
+        if (restTimer <= 0f)
+        {
+            StartChase();
+        }
+    }
+}
 
     private void StartChase()
     {
@@ -140,12 +136,9 @@ public class GoblinBoss : MonoBehaviour
         isAttacking = true;
         DOTGoblin.DoStop();
         anim.SetTrigger("action");
-
+        
         Vector3 targetDirection = target.position - batOriginalPosition.position;
         targetDirection.Normalize();
         batTargetPosition = batOriginalPosition.position + targetDirection * 10f;
-
-        // Instanciar un nuevo bate para cada ataque
-        Bat = Instantiate(Bat, batOriginalPosition.position, Quaternion.Euler(0f, 0f, 50f));
     }
 }
