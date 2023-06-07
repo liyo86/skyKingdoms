@@ -407,7 +407,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BoyAnimCntrl
+  m_Name: BoyAnimCntrlStory1
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: walk
@@ -462,7 +462,7 @@ AnimatorController:
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 1
+    m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: specialattack
     m_Type: 9

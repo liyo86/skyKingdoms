@@ -9,7 +9,7 @@ public class Text_Level3
         switch (step)
         {
             case 1:
-                text = "Derrota a la flor para conseguir la gema.";
+                text = "MISION*Derrota a la flor para conseguir la gema.";
                 break;
         }
         

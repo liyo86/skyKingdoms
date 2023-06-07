@@ -1,8 +1,10 @@
 using System;
 using System.Reflection;
 using Doublsb.Dialog;
+using Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -16,6 +18,7 @@ namespace Managers
 
         [SerializeField] private DialogManager dialogManager;
         [SerializeField] private GameObject nextBtn;
+        [SerializeField] private Text characterText;
 
         private DOTDialogAnimator dialogAnimator;
 
@@ -42,6 +45,7 @@ namespace Managers
             {
                 Destroy(gameObject);
             }
+            
             dialogAnimator = GetComponent<DOTDialogAnimator>();
         }
 
@@ -96,7 +100,13 @@ namespace Managers
 
                 currentText = (string)storyMethod.Invoke(null, new object[] { step });
 
-                DialogData dialogData = new DialogData(currentText);
+                int asteriskIndex = currentText.IndexOf("*");
+                
+                string characterName = currentText.Substring(0, asteriskIndex);
+
+                DialogData dialogData = new DialogData(currentText.Substring(asteriskIndex + 1));
+
+                characterText.text = characterName;
 
                 canCheckVisibility = true;
 
@@ -111,7 +121,7 @@ namespace Managers
         // Para cuando el Player controla el botón
         void CheckShowButton()
         {
-            var isActivated = dialogManager.Printer_Text.text.Length > currentText.Length - 1;
+            var isActivated = CanContinue();
             nextBtn.SetActive(isActivated);   
             isSubmitBtn = !isActivated;
         }
@@ -128,9 +138,12 @@ namespace Managers
 
         public bool CanContinue()
         {
-            return dialogManager.Printer_Text.text.Length >= currentText.Length;
-        }
+            int asteriskIndex = currentText.IndexOf("*");
+            string text = currentText.Substring(asteriskIndex + 1);
 
+            return dialogManager.Printer_Text.text.Length >= text.Length;
+        }
+        
         // No hay más texto que mostrar
         void StoryEnds()
         {
@@ -191,6 +204,12 @@ namespace Managers
         public void HideDialogBox()
         {
             dialogAnimator.HideDialogBox();
+        }
+
+        public void StopStory()
+        {
+            step = maxStep;
+            StoryEnds();
         }
     }
 }
