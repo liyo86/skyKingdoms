@@ -29,7 +29,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-
 namespace Doublsb.Dialog
 {
     public class DialogManager : MonoBehaviour

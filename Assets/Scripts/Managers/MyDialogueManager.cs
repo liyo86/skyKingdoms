@@ -1,7 +1,6 @@
 using System;
 using System.Reflection;
 using Doublsb.Dialog;
-using Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,6 +16,7 @@ namespace Managers
         public int Step => step;
 
         [SerializeField] private DialogManager dialogManager;
+        [SerializeField] private GameObject selectorManager;
         [SerializeField] private GameObject nextBtn;
         [SerializeField] private Text characterText;
 
@@ -92,7 +92,7 @@ namespace Managers
         }
 
         // Muestro nuevo texto
-        void NewDialogText()
+        private void NewDialogText()
         {
             if (step < maxStep)
             {
@@ -117,7 +117,7 @@ namespace Managers
                 StoryEnds();
             }
         }
-
+        
         // Para cuando el Player controla el botón
         void CheckShowButton()
         {
@@ -148,7 +148,7 @@ namespace Managers
         void StoryEnds()
         {
             dialogAnimator.HideDialogBox();
-            MyGameManager.Instance.ResumePlayerMovement();
+            MyGameManager.ResumePlayerMovement();
         }
         
         // Player Input Action Submit

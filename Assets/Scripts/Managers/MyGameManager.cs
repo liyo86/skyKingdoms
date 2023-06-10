@@ -78,6 +78,7 @@ public class MyGameManager : MonoBehaviour
                 break;
             default:
                 Debug.Log("No music assigned for scene: " + sceneName);
+                ResumePlayerMovement();
                 break;
         }
     }
@@ -145,7 +146,7 @@ public class MyGameManager : MonoBehaviour
         }
     }
 
-    public void ResumePlayerMovement()
+    public static void ResumePlayerMovement()
     {
         if (BoyController.Instance != null)
         {

@@ -60,7 +60,6 @@ namespace Managers
                 else if (actualLevel == "level2")
                 {
                     canStart = false;
-                    Debug.Log("entro");
                     MyDialogueManager.Instance.TextLevel("Level2");
                 }
                 else if (actualLevel == "level3") //Boss

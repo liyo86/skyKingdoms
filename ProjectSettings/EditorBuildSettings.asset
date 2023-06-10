@@ -38,4 +38,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cinematic Scenes/Story_1.unity
     guid: b1bb5c9a64e0c4fc3aa261031080f51e
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 379a98a160cdc4abaae2984044a119de, type: 2}
