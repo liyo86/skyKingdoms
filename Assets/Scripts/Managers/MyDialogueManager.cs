@@ -118,6 +118,22 @@ namespace Managers
             }
         }
         
+        // Dialogos con opciones
+        public void NewOptionText(string text, string character)
+        {
+            currentText = text;
+
+            string characterName = character;
+
+            DialogData dialogData = new DialogData(currentText);
+
+            characterText.text = characterName;
+
+            canCheckVisibility = true;
+
+            dialogManager.Show(dialogData);
+        }
+        
         // Para cuando el Player controla el botón
         void CheckShowButton()
         {

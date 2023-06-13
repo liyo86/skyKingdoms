@@ -9,10 +9,13 @@ namespace Managers
     public class MyLevelManager : MonoBehaviour
     {
         public static MyLevelManager Instance;
-        public bool canStart;
-        public bool canCheck;
-        public int enemyCount;
-        
+
+        public bool canStart { get; set; }
+
+        private bool canCheck { get; set; }
+
+        public int enemyCount { get; set; }
+
         private string actualLevel = "";
         private bool flowerDefeated;
         private bool goblinDefeated;
@@ -40,68 +43,71 @@ namespace Managers
             }
         }
 
-        private void Start()
-        {
-            if(SceneManager.GetActiveScene().name == "BossBattle")
-                Level3();
-        }
-
-        private void Update()
+        private void Update() //Configuraciones que necesita cada escena
         {
             if (canStart)
             {
-                if (actualLevel == "level1")
+                switch (actualLevel)
                 {
-                    canStart = false;
-                    MyDialogueManager.Instance.TextLevel("Level1");
-                    Gem_Level1.SetActive(false);
-                    canCheck = true;
-                }
-                else if (actualLevel == "level2")
-                {
-                    canStart = false;
-                    MyDialogueManager.Instance.TextLevel("Level2");
-                }
-                else if (actualLevel == "level3") //Boss
-                {
-                    canStart = false;
-                    MyDialogueManager.Instance.TextLevel("Level3");
-                    Gem_Level_Boss.SetActive(false);
-                    canCheck = true;
+                    case "level1":
+                        canStart = false;
+                        MyDialogueManager.Instance.TextLevel("Level1");
+                        Gem_Level1.SetActive(false);
+                        canCheck = true;
+                        break;
+                    case "level2":
+                        canStart = false;
+                        Debug.Log("LLego");
+                        MyDialogueManager.Instance.TextLevel("Level2");
+                        break;
+                    //Boss
+                    case "level3":
+                        canStart = false;
+                        MyDialogueManager.Instance.TextLevel("Level3");
+                        Gem_Level_Boss.SetActive(false);
+                        canCheck = true;
+                        break;
+                    case "Story_1":
+                        canStart = false;
+                        MyGameManager.ResumePlayerMovement();
+                        StoryOneTransition.Instance.CanCheck = true;
+                        break;
                 }
             }
 
-            if (canCheck)
+            if (!canCheck) return;
+            
+            switch (actualLevel)
             {
-                if (actualLevel == "level1")
-                {
+                case "level1":
                     CheckEnemyCounter();
-                }
-                else if (actualLevel == "level3")
+                    break;
+                case "level3" when !flowerDefeated:
+                    CheckFlowerBossLife();
+                    break;
+                case "level3":
                 {
-                    if (!flowerDefeated)
-                        CheckFlowerBossLife();
-                    else if (flowerDefeated && !goblinDefeated)
+                    if (flowerDefeated && !goblinDefeated)
                         CheckGoblinBossLife();
+                    break;
                 }
             }
         }
+        
+        public void Level(string level, bool start = false)
+        {
+            actualLevel = level;
+            canStart = start;
+        }
 
-        public void Level1()
+        public void DialogOptionResponse()
         {
-            actualLevel = "level1";
-        }
-        
-        public void Level2()
-        {
-            actualLevel = "level2";
-        }
-        
-        //Boss
-        public void Level3()
-        {
-            actualLevel = "level3";
-            canStart = true;
+            switch (actualLevel)
+            {
+                case "Story_1":
+                    SceneManager.LoadScene("Level1");
+                    break;
+            }
         }
 
         private void CheckEnemyCounter()

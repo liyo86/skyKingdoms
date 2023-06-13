@@ -1,49 +1,33 @@
-using System.Collections.Generic;
-using Doublsb.Dialog;
 using Managers;
+using UI;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StoryOneTransition : MonoBehaviour
 {
-    public DialogManager DialogManager;
+    public static StoryOneTransition Instance;
     private bool textShowed;
+    public DialogueOptions dialogueOptions;
+    public bool CanCheck;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(Constants.PLAYER) && !textShowed)
-        {
-            textShowed = true;
-            var dialogTexts = new List<DialogData>();
-            var Text1 = new DialogData("¿Estás preparado?");
-            Text1.SelectList.Add("Yes", "Sí");
-            Text1.SelectList.Add("No", "No");
-
-            Text1.Callback = () => Check_Correct();
-
-            dialogTexts.Add(Text1);
-
-            DialogManager.Show(dialogTexts);
-         
-        }
+        if (!other.CompareTag(Constants.PLAYER) || textShowed || !CanCheck) return;
+        textShowed = true;
+        MyDialogueManager.Instance.NewOptionText(Text_Story_1.OptionText, Constants.DRAGON);
+        dialogueOptions.ShowOptions();
     }
     
-    private void Check_Correct()
+    
+
+    private void OnTriggerExit(Collider other)
     {
-        if(DialogManager.Result == "Yes")
-        {
-            var dialogTexts = new List<DialogData>();
-
-            dialogTexts.Add(new DialogData("Nos vamos"));
-
-            DialogManager.Show(dialogTexts);
-        }
-        else if (DialogManager.Result == "No")
-        {
-            var dialogTexts = new List<DialogData>();
-
-            dialogTexts.Add(new DialogData("Date prisa"));
-
-            DialogManager.Show(dialogTexts);
-        }
+        textShowed = false;
     }
+
 }

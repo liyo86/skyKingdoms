@@ -1,6 +1,7 @@
 public static class Text_Story_1
 {
     public static int GetMaxStep() => 14;
+    public static string OptionText = "¿Estás seguro?";
 
     public static string Text(int step)
     {

@@ -116,18 +116,7 @@ public class DollyTrack_Story_1 : MonoBehaviour
         MyDialogueManager.Instance.StopStory();
         leoCam.enabled = true;
         finalCam.enabled = false;
-        boyControllerScript.enabled = true;
+        //boyControllerScript.enabled = true;
+        MyLevelManager.Instance.Level("Story_1", true);
     }
-
-    #region SALTAR ESCENA
-    public void LoadScene()
-    {
-        if (!btnPresed)
-        {
-            btnPresed = true;
-            MyDialogueManager.Instance.HideDialogBox();
-            _LoadScreenManager.LoadScene();
-        }
-    }
-    #endregion
 }

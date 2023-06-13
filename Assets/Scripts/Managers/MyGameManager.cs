@@ -48,7 +48,7 @@ public class MyGameManager : MonoBehaviour
                 break;
             case "Level1":
                 MyAudioManager.Instance.PlayMusic("dayAmbient");
-                MyLevelManager.Instance.Level1();
+                MyLevelManager.Instance.Level("level1");
                
                 GameObject Player = GameObject.FindWithTag(Constants.PLAYER);
                 if (Player == null) return;
@@ -61,20 +61,24 @@ public class MyGameManager : MonoBehaviour
                 break;
             case "Level2":
                 MyAudioManager.Instance.PlayMusic("dungeon");
-                MyLevelManager.Instance.Level2();
+                MyLevelManager.Instance.Level("level2", true);
                 break;
             case "Flight":
                 MyAudioManager.Instance.PlayMusic("flight");
                 break;
             case "BossBattle":
                 MyAudioManager.Instance.PlayMusic("boss");
-                MyLevelManager.Instance.Level3();
+                MyLevelManager.Instance.Level("level3", true);
                 break;
             case "TheEnd":
                 MyAudioManager.Instance.PlayMusic("theEnd");
                 break;
             case "Story_0":
                 MyAudioManager.Instance.PlayMusic("dungeon");
+                break;
+            case "Story_1":
+                MyAudioManager.Instance.PlayMusic("dungeon");
+                MyAudioManager.Instance.PlayMusic("town");
                 break;
             default:
                 Debug.Log("No music assigned for scene: " + sceneName);
