@@ -80,6 +80,9 @@ public class MyGameManager : MonoBehaviour
                 MyAudioManager.Instance.PlayMusic("dungeon");
                 MyAudioManager.Instance.PlayMusic("town");
                 break;
+            case "Menu_game":
+                MyAudioManager.Instance.PlayMusic("Cinematic");
+                break;
             default:
                 Debug.Log("No music assigned for scene: " + sceneName);
                 ResumePlayerMovement();

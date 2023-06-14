@@ -6,14 +6,13 @@ public class InputsUI : MonoBehaviour
 {
     [Header("Configuration")]
     public InputActionAsset inputActions;
-    public LoadScreenManager sceneManager;
     public List<GameObject> selectList = new List<GameObject>();
     public GameObject menuCanvas;
 
-    protected InputAction movementAction;
-    protected InputAction submitAction;
+    private InputAction movementAction;
+    private InputAction submitAction;
+    private int maxOptions;
     protected int actualOption = 0;
-    protected int maxOptions;
 
     private void Awake()
     {
