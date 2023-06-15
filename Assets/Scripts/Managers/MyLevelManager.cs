@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using JetBrains.Annotations;
+using Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +16,8 @@ namespace Managers
         private bool canCheck { get; set; }
 
         public int enemyCount { get; set; }
+
+        public bool backToScene;
 
         private string actualLevel = "";
         private bool flowerDefeated;
@@ -36,6 +39,7 @@ namespace Managers
             if (Instance == null)
             {
                 Instance = this;
+                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -57,7 +61,6 @@ namespace Managers
                         break;
                     case "level2":
                         canStart = false;
-                        Debug.Log("LLego");
                         MyDialogueManager.Instance.TextLevel("Level2");
                         break;
                     //Boss
@@ -69,8 +72,16 @@ namespace Managers
                         break;
                     case "Story_1":
                         canStart = false;
+                        if (backToScene)
+                        {
+                            backToScene = false;
+                            var position = GameObject.FindWithTag("BackPosition").GetComponent<Transform>()
+                                .position;
+                            BoyController.Instance.SetPosition(position);
+                        }
+
+                        StoryOneTransition.Instance.CanCheckDialogueOptions();
                         MyGameManager.ResumePlayerMovement();
-                        StoryOneTransition.Instance.CanCheck = true;
                         break;
                 }
             }

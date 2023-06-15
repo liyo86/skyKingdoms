@@ -1,5 +1,6 @@
 using System.Collections;
 using DG.Tweening;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -469,6 +470,7 @@ namespace Player
         {
             if (other.CompareTag("Dragon"))
             {
+                if(MyLevelManager.Instance.backToScene) return;
                 sceneManager.LoadScene();
             }
             else if (other.CompareTag("Limit"))
@@ -525,6 +527,12 @@ namespace Player
             Dragon.SetActive(true);
             Dragon.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             Dragon.transform.DOMoveY(transform.position.y, 2).SetEase(Ease.Linear).Play();
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            transform.position = position;
+            transform.rotation = Quaternion.Euler(0f, 90f, 0f);
         }
     }
 }

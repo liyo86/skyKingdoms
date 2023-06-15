@@ -25,6 +25,7 @@ TagManager:
   - Bat
   - Wall
   - Limit
+  - BackPosition
   layers:
   - Default
   - TransparentFX

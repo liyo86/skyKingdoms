@@ -1,26 +1,43 @@
+using System;
 using Managers;
 using UI;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StoryOneTransition : MonoBehaviour
 {
     public static StoryOneTransition Instance;
     private bool textShowed;
     public DialogueOptions dialogueOptions;
-    public bool CanCheck;
+    private bool CanCheck;
 
     private void Awake()
     {
         Instance = this;
     }
 
+    private void Update()
+    {
+        Debug.Log(CanCheck);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag(Constants.PLAYER) || textShowed || !CanCheck) return;
-        textShowed = true;
-        MyDialogueManager.Instance.NewOptionText(Text_Story_1.OptionText, Constants.DRAGON);
-        dialogueOptions.ShowOptions();
+        switch (gameObject.name)
+        {
+            case "Story_1Transition":
+                MyLevelManager.Instance.backToScene = true;
+                SceneManager.LoadScene("Story_1");
+                break;
+            case "DragonTransition":
+                Debug.Log("Entro y la variable es: " + CanCheck);
+                if (!other.CompareTag(Constants.PLAYER) || textShowed || !CanCheck) return;
+                textShowed = true;
+    
+                MyDialogueManager.Instance.NewOptionText(Text_Story_1.OptionText, Constants.DRAGON);
+                dialogueOptions.ShowOptions();
+                break;
+        }
     }
     
     
@@ -30,4 +47,8 @@ public class StoryOneTransition : MonoBehaviour
         textShowed = false;
     }
 
+    public void CanCheckDialogueOptions()
+    {
+        CanCheck = true;
+    }
 }

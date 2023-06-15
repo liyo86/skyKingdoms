@@ -110,6 +110,8 @@ namespace Managers
 
                 canCheckVisibility = true;
 
+                dialogAnimator.ShowDialogBox();
+                
                 dialogManager.Show(dialogData);
             }
             else
@@ -130,6 +132,8 @@ namespace Managers
             characterText.text = characterName;
 
             canCheckVisibility = true;
+            
+            dialogAnimator.ShowDialogBox();
 
             dialogManager.Show(dialogData);
         }
@@ -143,14 +147,6 @@ namespace Managers
         }
 
         // Para cuando la cinemática controla los cambios de texto
-        void CheckDialogVisibility()
-        {
-            if (dialogManager.Printer_Text.text.Length > currentText.Length - 1 && canCheckVisibility)
-            {
-                canCheckVisibility = false;
-                dialogAnimator.HideDialogBox();
-            }
-        }
 
         public bool CanContinue()
         {

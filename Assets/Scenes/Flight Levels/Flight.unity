@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.27468956, g: 0.05546941, b: 0.84873605, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1694,8 +1694,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0:00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e70d571c556f4400f894218b631e1f58, type: 2}
-  m_sharedMaterial: {fileID: -1051094484157600873, guid: e70d571c556f4400f894218b631e1f58, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e59e52c4a6823470f8e6b120e5a9e1d4, type: 2}
+  m_sharedMaterial: {fileID: 2019418907861127595, guid: e59e52c4a6823470f8e6b120e5a9e1d4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1719,7 +1719,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 133.75
+  m_fontSize: 132.15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1829,16 +1829,16 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e70d571c556f4400f894218b631e1f58, type: 2}
-  m_sharedMaterial: {fileID: -1051094484157600873, guid: e70d571c556f4400f894218b631e1f58, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e59e52c4a6823470f8e6b120e5a9e1d4, type: 2}
+  m_sharedMaterial: {fileID: 2019418907861127595, guid: e59e52c4a6823470f8e6b120e5a9e1d4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2748476635
-  m_fontColor: {r: 0.8584906, g: 0.4251958, b: 0.8235039, a: 0.6392157}
-  m_enableVertexGradient: 1
+    rgba: 4291980507
+  m_fontColor: {r: 0.8584906, g: 0.4251958, b: 0.8235039, a: 1}
+  m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -1860,7 +1860,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using Cinemachine;
+using DG.Tweening;
 using Managers;
 using Player;
 using UnityEngine;
@@ -18,21 +20,30 @@ public class DollyTrack_Story_1 : MonoBehaviour
     public GameObject Leo;
     public Animator _anim;
     public GameObject Dragon;
-
+    public Transform DragonIdlePosition;
+    
     private bool btnPresed = false;
     #endregion
-
-    void Start()
+    
+    private void Start()
     {
-        if (dollyCartSeq1.m_Path != null)
-            dollyCartSeq1.m_Speed = 12;
+        if (MyLevelManager.Instance.backToScene)
+        {
+            GameControl();
+        }
+        else
+        {
+            if (dollyCartSeq1.m_Path != null)
+                dollyCartSeq1.m_Speed = 12;
         
-        if (dollyCartSeq2.m_Path != null)
-            dollyCartSeq2.m_Speed = 0;
+            if (dollyCartSeq2.m_Path != null)
+                dollyCartSeq2.m_Speed = 0;
         
     
-        _anim.SetBool("walk", false);
-        StartCoroutine(DollyCart());
+            _anim.SetBool("walk", false);
+        
+            StartCoroutine(DollyCart());   
+        }
     }
     
     private IEnumerator DollyCart()
@@ -113,10 +124,10 @@ public class DollyTrack_Story_1 : MonoBehaviour
     public void GameControl()
     {
         StopAllCoroutines();
+        //Dragon.transform.DOMove(DragonIdlePosition.position, 1f).SetEase(Ease.Linear).Play();
         MyDialogueManager.Instance.StopStory();
         leoCam.enabled = true;
         finalCam.enabled = false;
-        //boyControllerScript.enabled = true;
         MyLevelManager.Instance.Level("Story_1", true);
     }
 }
