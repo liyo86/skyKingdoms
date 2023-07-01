@@ -30,6 +30,7 @@ public class DollyTrack_Story_1 : MonoBehaviour
         if (MyLevelManager.Instance.backToScene)
         {
             GameControl();
+            SetDragonPosition();
         }
         else
         {
@@ -45,7 +46,16 @@ public class DollyTrack_Story_1 : MonoBehaviour
             StartCoroutine(DollyCart());   
         }
     }
-    
+
+    private void Update()
+    {
+        if (MyInputManager.Instance.AnyBtnPressed)
+        {
+            GameControl();
+            SetDragonPosition();
+        }
+    }
+
     private IEnumerator DollyCart()
     {
         MyDialogueManager.Instance.Init(); 
@@ -130,4 +140,10 @@ public class DollyTrack_Story_1 : MonoBehaviour
         finalCam.enabled = false;
         MyLevelManager.Instance.Level("Story_1", true);
     }
+
+    private void SetDragonPosition()
+    {
+        dollyCartSeq1.m_Position = dollyCartSeq1.m_Path.PathLength;
+    }
+
 }

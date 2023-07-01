@@ -8,7 +8,7 @@ namespace UI
     public class DialogueOptions : MonoBehaviour
     {
         [Header("Configuration")]
-        public InputActionAsset inputActions;
+        //public InputActionAsset inputActions;
         public List<GameObject> selectList = new List<GameObject>();
 
         public InputAction movementAction;
@@ -17,31 +17,23 @@ namespace UI
         private int maxOptions;
     
         public GameObject Options;
+        public GameObject OptionsCharacter;
 
         private void Awake()
         {
-            movementAction = inputActions.FindActionMap("Player UI").FindAction("Direction");
-            submitAction = inputActions.FindActionMap("Player UI").FindAction("Submit");
-        
             maxOptions = selectList.Count;
         }
 
         private void OnEnable()
         {
-            movementAction.performed += OnMovementPerformed;
-            movementAction.Enable();
-
-            submitAction.performed += OnSubmit;
-            submitAction.Enable();
+            MyInputManager.Instance.uiMovementAction.performed += OnMovementPerformed;
+            MyInputManager.Instance.submitAction.performed += OnSubmit;
         }
 
         private void OnDisable()
         {
-            movementAction.performed -= OnMovementPerformed;
-            movementAction.Disable();
-
-            submitAction.performed -= OnSubmit;
-            submitAction.Disable();
+            MyInputManager.Instance.uiMovementAction.performed -= OnMovementPerformed;
+            MyInputManager.Instance.submitAction.performed -= OnSubmit;
         }
 
         private void OnMovementPerformed(InputAction.CallbackContext context)
@@ -82,11 +74,12 @@ namespace UI
                 case 0:
                     Options.SetActive(false);
                     MyDialogueManager.Instance.HideDialogBox();
-                    MyLevelManager.Instance.DialogOptionResponse();
+                    MyLevelManager.Instance.DialogOptionResponse(actualOption);
                     break;
                 case 1:
                     Options.SetActive(false);
                     MyDialogueManager.Instance.HideDialogBox();
+                    MyLevelManager.Instance.DialogOptionResponse(actualOption);
                     break;
             }
         }
@@ -99,9 +92,10 @@ namespace UI
             }
         }
 
-        public void ShowOptions()
+        public void ShowOptions(bool showCharacter = false)
         {
             Options.SetActive(true);
+            OptionsCharacter.SetActive(showCharacter);
         }
     }
 }

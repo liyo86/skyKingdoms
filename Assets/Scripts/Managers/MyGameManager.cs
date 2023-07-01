@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using AI.Player_Controller;
 using Player;
@@ -9,9 +10,7 @@ namespace Managers
     public class MyGameManager : MonoBehaviour
     {
         #region VARIABLES
-
         public static MyGameManager Instance;
-
         public GameObject GameOverCanvas;
         public GameObject animationGameOver;
         public GameObject menuGameOver;
@@ -19,7 +18,11 @@ namespace Managers
         public bool gameOver;
         public bool isLoading;
         public bool AIDemoControl;
-
+        
+        [SerializeField]
+        private bool _playerControl;
+        public event Action OnPlayerControl;
+        
         #endregion
     
         #region UNITY METHODS
@@ -35,6 +38,23 @@ namespace Managers
                 Destroy(gameObject);
             }
         }
+
+        private void Start()
+        {
+            if(_playerControl)
+                OnPlayerControl?.Invoke();
+        }
+        
+        private void OnEnable()
+        {
+            OnPlayerControl += ResumePlayerMovement;
+        }
+
+        private void OnDisable()
+        {
+            OnPlayerControl -= ResumePlayerMovement;
+        }
+
         #endregion
     
         #region INIT CONFIGURATION
@@ -87,6 +107,7 @@ namespace Managers
                     break;
             }
         }
+
         #endregion
     
         #region COLLECTIBLES
@@ -156,6 +177,7 @@ namespace Managers
             if (BoyController.Instance != null)
             {
                 BoyController.Instance.CanMove = true;
+                MyInputManager.Instance.PlayerInputs();
             }
         }
         #endregion

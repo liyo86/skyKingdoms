@@ -16,11 +16,6 @@ public class StoryOneTransition : MonoBehaviour
         Instance = this;
     }
 
-    private void Update()
-    {
-        Debug.Log(CanCheck);
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         switch (gameObject.name)
@@ -30,7 +25,6 @@ public class StoryOneTransition : MonoBehaviour
                 SceneManager.LoadScene("Story_1");
                 break;
             case "DragonTransition":
-                Debug.Log("Entro y la variable es: " + CanCheck);
                 if (!other.CompareTag(Constants.PLAYER) || textShowed || !CanCheck) return;
                 textShowed = true;
     

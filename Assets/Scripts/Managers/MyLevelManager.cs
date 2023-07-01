@@ -19,6 +19,8 @@ namespace Managers
 
         public bool backToScene;
 
+        public int ActualDialogueResponse = -1;
+
         private string actualLevel = "";
         private bool flowerDefeated;
         private bool goblinDefeated;
@@ -45,6 +47,11 @@ namespace Managers
             {
                 Destroy(gameObject);
             }
+        }
+
+        private void Start()
+        {
+            //Interaction.Instance.Initialize(BoyController.Instance.transform, BoyController.Instance.OffsetCollider.transform.position, LayerMask.NameToLayer(Constants.LAYER_INTERACTABLE));
         }
 
         private void Update() //Configuraciones que necesita cada escena
@@ -80,6 +87,7 @@ namespace Managers
                             BoyController.Instance.SetPosition(position);
                         }
 
+                        //TODO null reference
                         StoryOneTransition.Instance.CanCheckDialogueOptions();
                         MyGameManager.ResumePlayerMovement();
                         break;
@@ -111,12 +119,15 @@ namespace Managers
             canStart = start;
         }
 
-        public void DialogOptionResponse()
+        public void DialogOptionResponse(int option = -1)
         {
             switch (actualLevel)
             {
                 case "Story_1":
                     SceneManager.LoadScene("Level1");
+                    break;
+                default:
+                    ActualDialogueResponse = option;
                     break;
             }
         }

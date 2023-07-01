@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     public static EnemyHealth Instance;
-    [SerializeField] private GameObject hitParticle;
+    //[SerializeField] private GameObject hitParticle;
 
     private void Awake()
     {
@@ -18,7 +18,7 @@ public class EnemyHealth : MonoBehaviour
         {
             MyLevelManager.Instance.enemyCount++;
             
-            hitParticle.SetActive(true);
+            //hitParticle.SetActive(true);
             
             other.gameObject.SetActive(false);
             

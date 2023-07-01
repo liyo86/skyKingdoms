@@ -1,5 +1,4 @@
 using System.Collections;
-using DG.Tweening;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,8 +24,7 @@ namespace Player
         [Tooltip("Máscara de capa utilizada para verificar si el personaje está en el suelo.")]
         [SerializeField]
         private LayerMask groundLayerMask;
-    
-        [Header("Jump Landing")]
+  
         [Tooltip("Distancia máxima para considerar que el personaje está en el suelo.")]
         [SerializeField]
         private float groundCheckDistance = 0.1f;
@@ -51,6 +49,9 @@ namespace Player
         [SerializeField]
         private Transform specialSpellSpawn;
         
+        [Tooltip("Offset Collider para interact.")]
+        public Collider OffsetCollider;
+        
 
         //CoolDown
         public float defenseCooldown; // Tiempo de reutilización de la defensa
@@ -69,23 +70,12 @@ namespace Player
         public float ShootCooldown => shootCooldown;
         public bool IsSpecialAttackCooldown => isSpecialAttackCooldown;
         public float SpecialAttackCooldown => specialAttackCooldown;
-
-    
-        public LoadScreenManager sceneManager;
         #endregion
 
         #region REFERENCES
         private Rigidbody rb;
         private Animator animator;
         private Vector3 movement;
-
-        // New Input System
-        private InputAction movementAction;
-        private InputAction shootAction;
-        private InputAction jumpAction;
-        private InputAction defenseAction;    
-        private InputAction specialAttackAction;
-        public InputActionAsset inputActions;
         #endregion
     
         #region PRIVATE VARIABLES
@@ -97,7 +87,7 @@ namespace Player
         private bool isDefending;
         private float gravity = 9.8f; // Valor de la gravedad
         private Coroutine shootCoroutine;
-        public float loadTime = 1f;
+        private float loadTime = 1f;
         private GameObject currentSpecialAttack;
         private Rigidbody rbCurrentSpecialAttack;
         private bool r2Triggered;
@@ -108,7 +98,6 @@ namespace Player
         #region PUBLIC VARIABLES
         public static BoyController Instance;
 
-        public GameObject Dragon;
         public bool CanMove { get; set; } = false;
 
         public bool IsDefending => isDefending;
@@ -122,55 +111,13 @@ namespace Player
         
             rb = GetComponent<Rigidbody>();
             animator = GetComponent<Animator>();
-            movementAction = inputActions.FindActionMap("Player").FindAction("Movement");
-            shootAction = inputActions.FindActionMap("Player").FindAction("Shoot");
-            jumpAction = inputActions.FindActionMap("Player").FindAction("Jump");
-            defenseAction = inputActions.FindActionMap("Player").FindAction("Defense");
-            specialAttackAction = inputActions.FindActionMap("Player").FindAction("Special Attack");
+
         }
-
-        private void OnEnable()
-        {
-            movementAction.performed += OnMovementPerformed;
-            movementAction.canceled += OnMovementCanceled;
-            movementAction.Enable();
         
-            shootAction.performed += OnShootPerformed;
-            shootAction.Enable();
-
-            jumpAction.performed += OnJumpPerformed;
-            jumpAction.Enable();
-
-            defenseAction.performed += OnDefensePerformed;
-            defenseAction.Enable();
-        
-            specialAttackAction.performed += OnR2Hold;
-            specialAttackAction.canceled += OnR2Hold;
-            specialAttackAction.Enable();
-        }
-
-        private void OnDisable()
-        {
-            movementAction.performed -= OnMovementPerformed;
-            movementAction.canceled -= OnMovementCanceled;
-            movementAction.Disable();
-        
-            shootAction.performed -= OnShootPerformed;
-            shootAction.Disable();
-        
-            jumpAction.performed -= OnJumpPerformed;
-            jumpAction.Disable();
-        
-            defenseAction.performed -= OnDefensePerformed;
-            defenseAction.Disable();
-        
-            specialAttackAction.performed -= OnR2Hold;
-            specialAttackAction.canceled -= OnR2Hold;
-            specialAttackAction.Disable();
-        }
-
         private void Update()
         {
+            if (Interaction.Instance.IsInteracting) return;
+            
             if (!CanMove) return;
             CheckGrounded();
 
@@ -238,20 +185,19 @@ namespace Player
         #endregion
 
         #region SHOOT
-        private void OnShootPerformed(InputAction.CallbackContext context)
+        public void SetShootPermormed()
         {
             if (!CanMove || isShootCooldown) return;
             isShootCooldown = true;
 
             //if (isGrounded)
             //{
-                movement = Vector2.zero;
-                isShooting = true;
-                animator.SetTrigger("shoot");
-                StartCoroutine(nameof(Shoot));
+            movement = Vector2.zero;
+            isShooting = true;
+            animator.SetTrigger("shoot");
+            StartCoroutine(nameof(Shoot));
                 
-                StartCoroutine(ShootCooldownTimer());
-            //}
+            StartCoroutine(ShootCooldownTimer());
         }
         
         private IEnumerator ShootCooldownTimer()
@@ -266,7 +212,11 @@ namespace Player
 
             MyAudioManager.Instance.PlaySfx("fireVoice");
 
-            Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
+            GameObject attack = Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
+
+            attack.SetActive(true);
+            
+            StartCoroutine(nameof(LaunchAttack), attack);
             
             isShooting = false;
         }
@@ -280,24 +230,34 @@ namespace Player
             Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
             
             isShooting = false;
-
-            // Esperar a que termine la animación de disparo antes de reactivar los controles
+            
             yield return new WaitForSeconds(0.5f);
 
             shootCoroutine = null;
         }
         
+        private IEnumerator LaunchAttack(GameObject attack)
+        {
+            Rigidbody _rbAttack = attack.GetComponent<Rigidbody>();
+            _rbAttack.velocity =  _rbAttack.transform.forward * 5f;
+            
+
+            yield return new WaitForSeconds(10f);
+
+            Destroy(attack.gameObject);
+        }
+        
         #endregion
 
         #region MOVEMENT
-        private void OnMovementPerformed(InputAction.CallbackContext context)
+        public void SetMovementPerformed(Vector3 movementInput)
         {
-            movement = context.ReadValue<Vector2>();
+            movement = movementInput;
         }
 
-        private void OnMovementCanceled(InputAction.CallbackContext context)
+        public void SetMovementCanceled(Vector3 movementInput)
         {
-            movement = Vector2.zero;
+            movement = movementInput;
         }
 
         #endregion
@@ -358,8 +318,8 @@ namespace Player
         #endregion
     
         #region DEFENSE
-
-        private void OnDefensePerformed(InputAction.CallbackContext context)
+        
+        public void SetDefensePerformed()
         {
             if (!CanMove || isDefenseCooldown) return;
 
@@ -369,7 +329,7 @@ namespace Player
             MyAudioManager.Instance.PlaySfx("defenseVoice");
             defensePrefab.SetActive(true);
             
-            StartCoroutine(DefenseActive());
+            StartCoroutine(DefenseActive());   
         }
 
         
@@ -429,8 +389,6 @@ namespace Player
 
         private IEnumerator LaunchSpecialAttack()
         {
-            // Lanzar el ataque especial en la dirección hacia la que mira el jugador
-            Vector3 attackDirection = transform.position;
             rbCurrentSpecialAttack.velocity = rbCurrentSpecialAttack.transform.forward * 10f;
 
             yield return new WaitForSeconds(2f);
@@ -466,12 +424,13 @@ namespace Player
 
         #endregion
         
+        #region TRIGGERS
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Dragon"))
+            if (other.CompareTag("Dragon")) //TODO controlar, en story_1 peta
             {
                 if(MyLevelManager.Instance.backToScene) return;
-                sceneManager.LoadScene();
+                //sceneManager.LoadScene();
             }
             else if (other.CompareTag("Limit"))
             {
@@ -523,10 +482,10 @@ namespace Player
 
         public void ShowDragon(Vector3 position)
         {
-            Dragon.GetComponent<Transform>().position = position;
-            Dragon.SetActive(true);
-            Dragon.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-            Dragon.transform.DOMoveY(transform.position.y, 2).SetEase(Ease.Linear).Play();
+            //Dragon.GetComponent<Transform>().position = position;
+            //Dragon.SetActive(true);
+           // Dragon.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            //Dragon.transform.DOMoveY(transform.position.y, 2).SetEase(Ease.Linear).Play();
         }
 
         public void SetPosition(Vector3 position)
@@ -534,5 +493,6 @@ namespace Player
             transform.position = position;
             transform.rotation = Quaternion.Euler(0f, 90f, 0f);
         }
+        #endregion
     }
 }
