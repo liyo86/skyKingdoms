@@ -4,6 +4,7 @@ using Cinemachine;
 using DG.Tweening;
 using Managers;
 using Player;
+using Service;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -54,7 +55,7 @@ public class DollyTrack_Story_1 : MonoBehaviour
 
     private void Update()
     {
-        if (MyInputManager.Instance.AnyBtnPressed)
+        if (ServiceLocator.GetService<MyInputManager>().AnyBtnPressed)
         {
             GameControl();
             SetDragonPosition();

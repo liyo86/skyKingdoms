@@ -10,7 +10,7 @@ public class DOTDialogAnimator : MonoBehaviour
     private float fadeInTime = 1f;
     private Image dialogImage;
 
-    private void Awake()
+    private void Start()
     {
         dialogImage = dialogImageObj.GetComponent<Image>();
     }

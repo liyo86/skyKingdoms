@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using Cinemachine;
 using Managers;
+using Service;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DollyTrack_Story_0 : MonoBehaviour
 {
@@ -10,8 +13,6 @@ public class DollyTrack_Story_0 : MonoBehaviour
     public CinemachineDollyCart dollyCartSeq2;
     public CinemachineVirtualCamera finalCam;
     public GameObject BlackCanvas;
-    
-    public LoadScreenManager _LoadScreenManager;
 
     [Header("Characters")]
     public GameObject Princess;
@@ -32,9 +33,18 @@ public class DollyTrack_Story_0 : MonoBehaviour
     private bool step_2;
     private bool step_3;
     private bool step_4;
-    private bool btnPresed;
 
     #endregion
+
+    private void OnEnable()
+    {
+        ServiceLocator.GetService<MyInputManager>().submitAction.performed += LoadScene;
+    }
+
+    private void OnDisable()
+    {
+        ServiceLocator.GetService<MyInputManager>().submitAction.performed -= LoadScene;
+    }
 
     void Start()
     {
@@ -61,7 +71,8 @@ public class DollyTrack_Story_0 : MonoBehaviour
         yield return new WaitForSeconds(5); //Camino al centro de la sala
         dollyCartSeq1.m_Speed = 0;
         Goblin.DoStop();
-        MyDialogueManager.Instance.Init(); // LLego a la mitad de la sala
+
+        ServiceLocator.GetService<MyDialogueManager>().Init(); // LLego a la mitad de la sala
 
         yield return new WaitForSeconds(3);
         dollyCartSeq1.m_Speed = 1;
@@ -71,46 +82,42 @@ public class DollyTrack_Story_0 : MonoBehaviour
         dollyCartSeq1.m_Speed = 0;
         Goblin.DoStop();
         
-        MyDialogueManager.Instance.NextText(); // ALTO
+        ServiceLocator.GetService<MyDialogueManager>().NextText(); // ALTO
         Princess.SetActive(true);
         dollyCartSeq2.m_Speed = 2;
-        yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        yield return new WaitUntil(() =>  ServiceLocator.GetService<MyDialogueManager>().CanContinue());
         yield return new WaitForSeconds(1);
         
         Goblin.DoRotate();
         yield return new WaitForSeconds(1);
         
         finalCam.enabled = true;
-        MyDialogueManager.Instance.NextText(); // Sera mejor
-        yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        ServiceLocator.GetService<MyDialogueManager>().NextText(); // Sera mejor
+        yield return new WaitUntil(() =>  ServiceLocator.GetService<MyDialogueManager>().CanContinue());
         yield return new WaitForSeconds(1);
         
-        MyDialogueManager.Instance.NextText();
-        yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        ServiceLocator.GetService<MyDialogueManager>().NextText();
+        yield return new WaitUntil(() =>         ServiceLocator.GetService<MyDialogueManager>().CanContinue());
         yield return new WaitForSeconds(1);
         
         BlackCanvas.SetActive(true);
-        MyDialogueManager.Instance.NextText();
-        yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        ServiceLocator.GetService<MyDialogueManager>().NextText();
+        yield return new WaitUntil(() => ServiceLocator.GetService<MyDialogueManager>().CanContinue());
         yield return new WaitForSeconds(1);
         
-        MyDialogueManager.Instance.NextText(); // Ultimo dialogo
-        yield return new WaitUntil(() => MyDialogueManager.Instance.CanContinue());
+        ServiceLocator.GetService<MyDialogueManager>().NextText(); // Ultimo dialogo
+        yield return new WaitUntil(() =>  ServiceLocator.GetService<MyDialogueManager>().CanContinue());
         yield return new WaitForSeconds(1);
         
-        MyDialogueManager.Instance.HideDialogBox();
+        ServiceLocator.GetService<MyDialogueManager>().HideDialogBox();
         yield return new WaitForSeconds(1);
-        _LoadScreenManager.LoadScene();
+        ServiceLocator.GetService<LoadScreenManager>().LoadScene("Story_1");
     }
 
-    public void LoadScene()
+    private void LoadScene(InputAction.CallbackContext context)
     {
-        if (!btnPresed)
-        {
-            btnPresed = true;
-            MyDialogueManager.Instance.HideDialogBox();
-            _LoadScreenManager.LoadScene();
-        }
+        ServiceLocator.GetService<MyDialogueManager>().HideDialogBox();
+        ServiceLocator.GetService<LoadScreenManager>().LoadScene("Story_1");
     }
     
 }

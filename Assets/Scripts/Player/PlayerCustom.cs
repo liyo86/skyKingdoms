@@ -1,7 +1,5 @@
 using Managers;
 using Service;
-using TMPro;
-using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,6 +24,8 @@ namespace Player
 
         void Start()
         {
+            ServiceLocator.GetService<MyInputManager>().UIInputs();
+            
             Girl.transform.rotation = Quaternion.Euler(0f, 00f, 0f);
             Boy.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             ServiceLocator.GetService<MyDialogueManager>().NewOptionText("Elige un personaje", "", "Leo", "Violet", true);
@@ -33,6 +33,7 @@ namespace Player
 
         private void OnMovementPerformed(InputAction.CallbackContext context)
         {
+            Debug.Log("Entro en monivimiento");
             var horizontalInput = context.ReadValue<Vector2>().x;
             
             Debug.Log(horizontalInput);

@@ -100,7 +100,7 @@ namespace Managers
                     break;
                 default:
                     Debug.Log("No music assigned for scene: " + sceneName);
-                    ServiceLocator.GetService<MyLevelManager>().Level(sceneName);
+                    //ServiceLocator.GetService<MyLevelManager>().Level(sceneName);
                     break;
             }
         }
@@ -174,7 +174,7 @@ namespace Managers
             if (BoyController.Instance != null)
             {
                 BoyController.Instance.CanMove = true;
-                MyInputManager.Instance.PlayerInputs();
+                //MyInputManager.Instance.PlayerInputs();
             }
         }
         #endregion

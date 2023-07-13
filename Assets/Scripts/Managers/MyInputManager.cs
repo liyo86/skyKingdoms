@@ -6,8 +6,6 @@ namespace Managers
 {
     public class MyInputManager : MonoBehaviour
     {
-        public static MyInputManager Instance;
-
         public InputActionAsset playerInput;
         private InputAction movementAction;
         private InputAction shootAction;
@@ -19,15 +17,11 @@ namespace Managers
         public InputAction submitAction;
         public InputAction anyAction;
 
-        public bool UIControls;
-        public bool PlayerControls;
-
         public bool AnyBtnPressed;
 
-        private void Start()
+        private void Awake()
         {
             Initialize();
-            UIInputs();
         }
 
         private void Initialize()
@@ -68,113 +62,7 @@ namespace Managers
         }
 
         #region ENABLE / DISABLE
-        private void OnEnable()
-        {
-            if (movementAction != null)
-            {
-                movementAction.performed += OnMovementPerformed;
-                movementAction.canceled += OnMovementCanceled;
-                movementAction.Enable();
-            }
 
-            if (shootAction != null)
-            {
-                shootAction.performed += OnShootPerformed;
-                shootAction.Enable();
-            }
-
-            if (jumpAction != null)
-            {
-                jumpAction.performed += OnJumpPerformed;
-                jumpAction.Enable();
-            }
-
-            if (defenseAction != null)
-            {
-                defenseAction.performed += OnDefensePerformed;
-                defenseAction.Enable();
-            }
-
-            if (specialAttackAction != null)
-            {
-                specialAttackAction.started += OnSpecialAttackStarted;
-                specialAttackAction.canceled += OnSpecialAttackCanceled;
-                specialAttackAction.Enable();
-            }
-
-            if (uiMovementAction != null)
-            {
-                uiMovementAction.performed += OnUIMovementPerformed;
-                uiMovementAction.Enable();
-            }
-
-            if (submitAction != null)
-            {
-                submitAction.performed += OnSubmit;
-                submitAction.Enable();
-            }
-
-            if (anyAction != null)
-            {
-                anyAction.performed += OnAny;
-                anyAction.canceled += OnAnyCanceled;
-                anyAction.Enable();
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (movementAction != null)
-            {
-                movementAction.performed -= OnMovementPerformed;
-                movementAction.canceled -= OnMovementCanceled;
-                movementAction.Disable();
-            }
-
-            if (shootAction != null)
-            {
-                shootAction.performed -= OnShootPerformed;
-                shootAction.Disable();
-            }
-
-            if (jumpAction != null)
-            {
-                jumpAction.performed -= OnJumpPerformed;
-                jumpAction.Disable();
-            }
-
-            if (defenseAction != null)
-            {
-                defenseAction.performed -= OnDefensePerformed;
-                defenseAction.Disable();
-            }
-
-            if (specialAttackAction != null)
-            {
-                specialAttackAction.started -= OnSpecialAttackStarted;
-                specialAttackAction.canceled -= OnSpecialAttackCanceled;
-                specialAttackAction.Disable();
-            }
-
-            if (uiMovementAction != null)
-            {
-                uiMovementAction.performed -= OnUIMovementPerformed;
-                uiMovementAction.Disable();
-            }
-
-            if (submitAction != null)
-            {
-                submitAction.performed -= OnSubmit;
-                submitAction.Disable();
-            }
-
-            if (anyAction != null)
-            {
-                anyAction.performed -= OnAny;
-                anyAction.canceled -= OnAnyCanceled;
-                anyAction.Disable();
-            }
-        }
 
         public void PlayerInputs()
         {
@@ -273,17 +161,7 @@ namespace Managers
         #endregion
 
         #region UI INPUTS
-        private void OnUIMovementPerformed(InputAction.CallbackContext context)
-        {
-            // Lógica para el movimiento de la interfaz de usuario
-        }
-
-        private void OnSubmit(InputAction.CallbackContext context)
-        {
-            if (MyDialogueManager.Instance != null)
-                MyDialogueManager.Instance.OnBtnSubmit();
-        }
-
+     
         private void OnAny(InputAction.CallbackContext context)
         {
             AnyBtnPressed = true;

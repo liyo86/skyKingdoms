@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using Managers;
+using Service;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,11 +13,23 @@ public class InputsUI : MonoBehaviour
     private int maxOptions;
     protected int actualOption = 0;
 
+    private void OnEnable()
+    {
+        ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed += OnMovementPerformed;
+        ServiceLocator.GetService<MyInputManager>().submitAction.performed += OnSubmit;
+    }
+
+    private void OnDisable()
+    {
+        ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed -= OnMovementPerformed;
+        ServiceLocator.GetService<MyInputManager>().submitAction.performed -= OnSubmit;
+    }
+
     private void Awake()
     {
         maxOptions = selectList.Count;
     }
-    
+
     protected virtual void OnMovementPerformed(InputAction.CallbackContext context)
     {
         float verticalInput = context.ReadValue<Vector2>().y;

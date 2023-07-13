@@ -31,7 +31,7 @@
 
         private void EndsCinematic(InputAction.CallbackContext obj)
         {
-            ServiceLocator.GetService<LoadScreenManager>().LoadScene("ChooseCharacter");
+            ServiceLocator.GetService<LoadScreenManager>().LoadScene("Menu_game");
         }
 
         #endregion
