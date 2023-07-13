@@ -174,7 +174,7 @@ namespace Managers
             if (BoyController.Instance != null)
             {
                 BoyController.Instance.CanMove = true;
-                //MyInputManager.Instance.PlayerInputs();
+          
             }
         }
         #endregion

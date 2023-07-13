@@ -4,71 +4,85 @@ using Managers;
 using Service;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
-public class InputsUI : MonoBehaviour
+namespace UI
 {
-    [Header("Configuration")]
-    public List<GameObject> selectList = new List<GameObject>();
-    public GameObject menuCanvas;
-    private int maxOptions;
-    protected int actualOption = 0;
-
-    private void OnEnable()
+    public class InputsUI : MonoBehaviour
     {
-        ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed += OnMovementPerformed;
-        ServiceLocator.GetService<MyInputManager>().submitAction.performed += OnSubmit;
-    }
+        [SerializeField]
+        private List<GameObject> optionList = new List<GameObject>();
 
-    private void OnDisable()
-    {
-        ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed -= OnMovementPerformed;
-        ServiceLocator.GetService<MyInputManager>().submitAction.performed -= OnSubmit;
-    }
-
-    private void Awake()
-    {
-        maxOptions = selectList.Count;
-    }
-
-    protected virtual void OnMovementPerformed(InputAction.CallbackContext context)
-    {
-        float verticalInput = context.ReadValue<Vector2>().y;
-
-        if (verticalInput > 0.1f)
+        private int _maxOptions;
+        
+        protected int ActualOption = 0;
+        
+        private void OnEnable()
         {
-            actualOption--;
-            if (actualOption < 0)
-            {
-                actualOption = maxOptions - 1;
-            }
-        }
-        else if (verticalInput < -0.1f)
-        {
-            actualOption++;
-            if (actualOption >= maxOptions)
-            {
-                actualOption = 0;
-            }
+            ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed += OnMovementPerformed;
+            ServiceLocator.GetService<MyInputManager>().submitAction.performed += OnSubmit;
+            ServiceLocator.GetService<MyInputManager>().anyAction.performed += OnAny;
         }
 
-        ShowIcon(actualOption);
-    }
+        private void OnDisable()
+        {
+            ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed -= OnMovementPerformed;
+            ServiceLocator.GetService<MyInputManager>().submitAction.performed -= OnSubmit;
+            ServiceLocator.GetService<MyInputManager>().anyAction.performed -= OnAny;
+        }
 
-    protected virtual void OnSubmit(InputAction.CallbackContext context)
-    {
+        private void Awake()
+        {
+            ServiceLocator.GetService<MyInputManager>().UIInputs();
+        }
+
+        private void Start()
+        {
+            _maxOptions = optionList.Count;
+        }
+
+        private void OnMovementPerformed(InputAction.CallbackContext obj)
+        {
+            float verticalInput = obj.ReadValue<Vector2>().y;
+            float horizontalInput = obj.ReadValue<Vector2>().x;
+        
+            if (verticalInput > 0.1f || horizontalInput > 0.1f)
+            {
+                ActualOption--;
+                if (ActualOption < 0)
+                {
+                    ActualOption = _maxOptions - 1;
+                }
+            }
+            else if (verticalInput < -0.1f || horizontalInput < 0.1f)
+            {
+                ActualOption++;
+                if (ActualOption >= _maxOptions)
+                {
+                    ActualOption = 0;
+                }
+            }
+
+            ShowIcon(ActualOption);
+        }
+        
+        protected virtual void OnSubmit(InputAction.CallbackContext context)
+        {
        
-    }
+        }
+        
+        private void ShowIcon(int option)
+        {
+            for (int i = 0; i < optionList.Count; i++)
+            {
+                optionList[i].SetActive(i == option);
+            }
+        }
     
-    protected virtual void OnAny(InputAction.CallbackContext context)
-    {
-       
-    }
-
-    protected void ShowIcon(int option)
-    {
-        for (int i = 0; i < selectList.Count; i++)
+        protected virtual void OnAny(InputAction.CallbackContext context)
         {
-            selectList[i].SetActive(i == option);
+          
         }
+    
     }
 }

@@ -1,69 +1,50 @@
+using System;
 using Managers;
 using Service;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Player
 {
-    public class PlayerCustom : MonoBehaviour
+    public class PlayerCustom : InputsUI
     {
         [SerializeField] GameObject Boy;
         [SerializeField] GameObject Girl;
-
-        private void OnEnable()
-        {
-            ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed += OnMovementPerformed;
-            ServiceLocator.GetService<MyInputManager>().submitAction.performed += OnSubmit;
-        }
-
-        private void OnDisable()
-        {
-            ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed -= OnMovementPerformed;
-            ServiceLocator.GetService<MyInputManager>().submitAction.performed -= OnSubmit;
-        }
-
+        
         void Start()
         {
-            ServiceLocator.GetService<MyInputManager>().UIInputs();
-            
             Girl.transform.rotation = Quaternion.Euler(0f, 00f, 0f);
             Boy.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             ServiceLocator.GetService<MyDialogueManager>().NewOptionText("Elige un personaje", "", "Leo", "Violet", true);
         }
 
-        private void OnMovementPerformed(InputAction.CallbackContext context)
+        private void Update()
         {
-            Debug.Log("Entro en monivimiento");
-            var horizontalInput = context.ReadValue<Vector2>().x;
-            
-            Debug.Log(horizontalInput);
-
-            switch (horizontalInput)
+            if (ActualOption == 0)
             {
-                case > 0.1f:
-                {
-                    
-                    Girl.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-                    Boy.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-                    break;
-                }
-                case < -0.1f:
-                {
-                    Girl.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-                    Boy.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-                    break;
-                }
+                Girl.transform.rotation = Quaternion.Euler(0f, 00f, 0f);
+                Boy.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            }
+            else
+            {
+                Girl.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                Boy.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             }
         }
-        
-        private void OnSubmit(InputAction.CallbackContext context)
+
+
+        protected override void OnSubmit(InputAction.CallbackContext context)
         {
-            if ( ServiceLocator.GetService<MyLevelManager>().ActualDialogueResponse == 1)
-                ServiceLocator.GetService<MyGameManager>().Character = "M";
-            else 
-                ServiceLocator.GetService<MyGameManager>().Character = "F";
+            base.OnSubmit(context);
             
-            ServiceLocator.GetService<LoadScreenManager>().LoadScene("Story_0");
+            if (ActualOption == 0)
+                ServiceLocator.GetService<PlayerData>().PlayerSO.player = "B";
+            else 
+                ServiceLocator.GetService<PlayerData>().PlayerSO.player = "G";
+            
+            //ServiceLocator.GetService<LoadScreenManager>().LoadScene("Story_0");
+            ServiceLocator.GetService<LoadScreenManager>().LoadScene("Test");
         }
     }
 }

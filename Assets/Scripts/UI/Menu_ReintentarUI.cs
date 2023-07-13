@@ -1,34 +1,36 @@
 using Managers;
+using Service;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class Menu_ReintentarUI : InputsUI
+namespace UI
 {
-    protected override void OnSubmit(InputAction.CallbackContext context)
+    public class Menu_ReintentarUI : InputsUI
     {
-        base.OnSubmit(context);
-
-        switch (actualOption)
+        protected override void OnSubmit(InputAction.CallbackContext context)
         {
-            case 0:
-                RestartLevel();
-                break;
-            case 1:
-                menuCanvas.SetActive(false);
-                SceneManager.LoadScene("Menu_game");
-                break;
+            base.OnSubmit(context);
+
+            switch (ActualOption)
+            {
+                case 0:
+                    RestartLevel();
+                    break;
+                case 1:
+                    ServiceLocator.GetService<LoadScreenManager>().LoadScene("Menu_game");
+                    break;
+            }
         }
-    }
+    
+        private void RestartLevel()
+        {
+            ServiceLocator.GetService<MyGameManager>().RestartLevel();
+            Invoke(nameof(RestartScene), 1f);
+        }
 
-    private void RestartLevel()
-    {
-        MyGameManager.Instance.RestartLevel();   
-        Invoke(nameof(RestartScene), 1f);
-    }
-
-    private void RestartScene()
-    {
-        menuCanvas.SetActive(false);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        private void RestartScene()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }

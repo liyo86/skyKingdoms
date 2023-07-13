@@ -69,7 +69,6 @@ namespace UI
         {
             Options.SetActive(false);
             ServiceLocator.GetService<MyDialogueManager>().HideDialogBox();
-            ServiceLocator.GetService<MyLevelManager>().DialogOptionResponse(actualOption);
         }
 
         private void ShowIcon(int option)

@@ -62,8 +62,6 @@ namespace Managers
         }
 
         #region ENABLE / DISABLE
-
-
         public void PlayerInputs()
         {
             if (uiMovementAction != null)

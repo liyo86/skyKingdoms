@@ -39,6 +39,9 @@ namespace Service
 
             var myDialogueManager = FindObjectOfType<MyDialogueManager>();
             ServiceLocator.AddService(myDialogueManager);
+            
+            var myPlayerData = FindObjectOfType<PlayerData>();
+            ServiceLocator.AddService(myPlayerData);
         }
     }
 }

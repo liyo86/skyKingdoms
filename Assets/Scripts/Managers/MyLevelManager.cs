@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using JetBrains.Annotations;
 using Player;
+using Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -104,19 +105,11 @@ namespace Managers
             canStart = start;
         }
 
-        public void DialogOptionResponse(int option = -1)
+        public void StartLevel()
         {
-            switch (actualLevel)
-            {
-                case "Story_1":
-                    SceneManager.LoadScene("Level1");
-                    break;
-                default:
-                    ActualDialogueResponse = option;
-                    break;
-            }
+            ServiceLocator.GetService<PlayerData>().PlayerInstantation();
         }
-
+        
         private void CheckEnemyCounter()
         {
             if (enemyCount >= 5)
