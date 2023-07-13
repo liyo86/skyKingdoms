@@ -1,4 +1,5 @@
-﻿using Player;
+﻿using Managers;
+using Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -47,7 +48,7 @@ public class Collectible : MonoBehaviour
     private void Collect()
     {
         if (collectSound)
-            MyAudioManager.Instance.PlaySfx("levelCompleteSFX");
+            //MyAudioManager.Instance.PlaySfx("levelCompleteSFX");
         if (collectEffect)
             Instantiate(collectEffect, transform.position, Quaternion.identity);
 

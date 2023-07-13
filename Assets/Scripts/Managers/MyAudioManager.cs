@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class MyAudioManager : MonoBehaviour
 {
-    public static MyAudioManager Instance;
     public AudioSource sourceSFX;
     public AudioSource sourceMusic;
    
@@ -15,6 +14,7 @@ public class MyAudioManager : MonoBehaviour
     public AudioClip boss;
     public AudioClip dungeon;
     public AudioClip theEnd;
+    public AudioClip town;
     
     // SFX
     public AudioClip ringSFX;
@@ -25,29 +25,7 @@ public class MyAudioManager : MonoBehaviour
     // Voice
     public AudioClip fireVoice;
     public AudioClip defenseVoice;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            Instance = null;
-        }
-    }
-
-
+    
     public void PlaySfx(string sfxName)
     {
         switch (sfxName)
@@ -108,6 +86,11 @@ public class MyAudioManager : MonoBehaviour
                 break;
             case nameof(dungeon):
                 sourceMusic.clip = dungeon;
+                sourceMusic.loop = true;
+                sourceMusic.Play();
+                break;
+            case nameof(town):
+                sourceMusic.clip = town;
                 sourceMusic.loop = true;
                 sourceMusic.Play();
                 break;

@@ -9,7 +9,7 @@ public class Text_Level2
         switch (step)
         {
             case 1:
-                text = "Encuentra la gema sin ser alcanzado por el fantasma.";
+                text = "MISION*Encuentra la gema sin ser alcanzado por el fantasma.";
                 break;
         }
         

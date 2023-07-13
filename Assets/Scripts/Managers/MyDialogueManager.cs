@@ -3,6 +3,7 @@ using System.Reflection;
 using Doublsb.Dialog;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -15,7 +16,9 @@ namespace Managers
         public int Step => step;
 
         [SerializeField] private DialogManager dialogManager;
+        [SerializeField] private GameObject selectorManager;
         [SerializeField] private GameObject nextBtn;
+        [SerializeField] private Text characterText;
 
         private DOTDialogAnimator dialogAnimator;
 
@@ -31,19 +34,6 @@ namespace Managers
         private const string TEXT_STORY = "Text_Story";
         private const string TEXT = "Text";
         private const string MAX_STEPS = "GetMaxStep";
-
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-            dialogAnimator = GetComponent<DOTDialogAnimator>();
-        }
 
         void LateUpdate()
         {
@@ -88,7 +78,7 @@ namespace Managers
         }
 
         // Muestro nuevo texto
-        void NewDialogText()
+        private void NewDialogText()
         {
             if (step < maxStep)
             {
@@ -96,10 +86,18 @@ namespace Managers
 
                 currentText = (string)storyMethod.Invoke(null, new object[] { step });
 
-                DialogData dialogData = new DialogData(currentText);
+                int asteriskIndex = currentText.IndexOf("*");
+                
+                string characterName = currentText.Substring(0, asteriskIndex);
+
+                DialogData dialogData = new DialogData(currentText.Substring(asteriskIndex + 1));
+
+                characterText.text = characterName;
 
                 canCheckVisibility = true;
 
+                dialogAnimator.ShowDialogBox();
+                
                 dialogManager.Show(dialogData);
             }
             else
@@ -107,35 +105,48 @@ namespace Managers
                 StoryEnds();
             }
         }
+        
+        // Dialogos con opciones
+        public void NewOptionText(string text, string character)
+        {
+            currentText = text;
 
+            string characterName = character;
+
+            DialogData dialogData = new DialogData(currentText);
+
+            characterText.text = characterName;
+
+            canCheckVisibility = true;
+            
+            dialogAnimator.ShowDialogBox();
+
+            dialogManager.Show(dialogData);
+        }
+        
         // Para cuando el Player controla el botón
         void CheckShowButton()
         {
-            var isActivated = dialogManager.Printer_Text.text.Length > currentText.Length - 1;
+            var isActivated = CanContinue();
             nextBtn.SetActive(isActivated);   
             isSubmitBtn = !isActivated;
         }
 
         // Para cuando la cinemática controla los cambios de texto
-        void CheckDialogVisibility()
-        {
-            if (dialogManager.Printer_Text.text.Length > currentText.Length - 1 && canCheckVisibility)
-            {
-                canCheckVisibility = false;
-                dialogAnimator.HideDialogBox();
-            }
-        }
 
         public bool CanContinue()
         {
-            return dialogManager.Printer_Text.text.Length >= currentText.Length;
-        }
+            int asteriskIndex = currentText.IndexOf("*");
+            string text = currentText.Substring(asteriskIndex + 1);
 
+            return dialogManager.Printer_Text.text.Length >= text.Length;
+        }
+        
         // No hay más texto que mostrar
         void StoryEnds()
         {
             dialogAnimator.HideDialogBox();
-            MyGameManager.Instance.ResumePlayerMovement();
+            MyGameManager.ResumePlayerMovement();
         }
         
         // Player Input Action Submit
@@ -191,6 +202,12 @@ namespace Managers
         public void HideDialogBox()
         {
             dialogAnimator.HideDialogBox();
+        }
+
+        public void StopStory()
+        {
+            step = maxStep;
+            StoryEnds();
         }
     }
 }

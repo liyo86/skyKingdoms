@@ -360,7 +360,7 @@ namespace AI.Player_Controller
         {
             yield return new WaitForSeconds(0.5f);
 
-            MyAudioManager.Instance.PlaySfx("fireVoice");
+           // MyAudioManager.Instance.PlaySfx("fireVoice");
 
             Instantiate(spellPrefab, spellSpawn.position, spellSpawn.rotation);
 

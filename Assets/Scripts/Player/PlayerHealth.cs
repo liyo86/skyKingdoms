@@ -1,4 +1,5 @@
 using System.Collections;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,26 +9,17 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Image HP;
     [SerializeField] private Color normalColor;
     [SerializeField] private Color damageColor;
-    
-    private int maxHealth;
+
     private int currentHealth;
-    public int CurrentHealth
-    {
-        get => currentHealth;
-    }
+    private int MaxHealth { get; set; }
 
-    public int MaxHealth
-    {
-        get => maxHealth;
-    }
-
-    void Start()
+    private void Start()
     {
         Instance = this;
         Init();
     }
 
-    void Init()
+    private void Init()
     {
         Reset();
     }
@@ -36,27 +28,29 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth -= damage;
 
-        StartCoroutine(ShowDamageEffect());
+        Debug.Log(currentHealth);
 
         if (currentHealth <= 0)
         {
             MyGameManager.Instance.GameOver();
         }
+        else
+        {
+            StartCoroutine(ShowDamageEffect());
+        }
     }
-    
-    IEnumerator ShowDamageEffect()
-    {
-        //healthSlider.image.color = damageColor;
-        //yield return new WaitForSeconds(0.3f); 
 
-        float startTime = Time.time;
-        float endTime = startTime + 0.5f;  
-        float startValue = HP.fillAmount;
-        float targetValue = currentHealth / 100f;
+    
+    private IEnumerator ShowDamageEffect()
+    {
+        var startTime = Time.time;
+        var endTime = startTime + 0.5f;  
+        var startValue = HP.fillAmount;
+        var targetValue = (float)currentHealth / MaxHealth;
 
         while (Time.time < endTime)
         {
-            float t = (Time.time - startTime) / (endTime - startTime);
+            var t = (Time.time - startTime) / (endTime - startTime);
             HP.fillAmount = Mathf.Lerp(startValue, targetValue, t);
             yield return null;
         }
@@ -64,8 +58,8 @@ public class PlayerHealth : MonoBehaviour
 
     public void Reset()
     {
-        maxHealth = 100;
-        currentHealth = maxHealth;
+        MaxHealth = 100;
+        currentHealth = MaxHealth;
         HP.fillAmount = 1f;
     }
 }

@@ -1,6 +1,3 @@
-using System;
-using UnityEngine;
-
 public static class Text_Story_0
 {
     public static int GetMaxStep() => 7;
@@ -12,22 +9,22 @@ public static class Text_Story_0
         switch (step)
         {
             case 1:
-                text = "GOBLIN:\nSi quieres un trabajo bien hecho, debes hacerlo tu mismo.";
+                text = "MORTEM*Si quieres un trabajo bien hecho, debes hacerlo tu mismo.";
                 break;
             case 2:
-                text = "¿?:\n¡Alto!";
+                text = "?*¡Alto!";
                 break;
             case 3:
-                text = "PRINCESA:\nSera mejor que no toques esa gema.";
+                text = "AMELIA*Sera mejor que no toques esa gema.";
                 break;
             case 4:
-                text = "GOBLIN:\nPero si la princesita ha venido al rescate.";
+                text = "MORTEM*Pero si la princesita ha venido al rescate.";
                 break;
             case 5:
-                text = "GOBLIN:\nJa, ja, ja... .";
+                text = "MORTEM*Ja, ja, ja... .";
                 break;
             case 6:
-                text = "PRINCESA:\n¡No Sueltame! ¡Socorrooo!";
+                text = "AMELIA*¡No Sueltame! ¡Socorrooo!";
                 break;
         }
         

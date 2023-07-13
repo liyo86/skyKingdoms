@@ -9,4 +9,7 @@ public class Constants
     
     public const string ATTACK_TRIGGER = "shoot";
     public const string PLAYER = "Player";
+    public const string DRAGON = "VRAZABARD";
+    
+    public const string LAYER_INTERACTABLE = "Interactable";
 }

@@ -35,7 +35,7 @@ public class Phase1 : FSMBoss
         if(agent.shockWaveParticle != null)
             agent.shockWaveParticle.Play();
         
-        MyAudioManager.Instance.PlaySfx("bossAttack1SFX");
+        //MyAudioManager.Instance.PlaySfx("bossAttack1SFX");
         
         Vector3 attackOnePosition = new Vector3(agent.transform.position.x, UnityEngine.Random.Range(0f, 2f), agent.transform.position.z - 6);
         

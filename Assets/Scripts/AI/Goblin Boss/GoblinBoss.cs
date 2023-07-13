@@ -34,7 +34,7 @@ public class GoblinBoss : MonoBehaviour
 
     private void Start()
     {
-        MyAudioManager.Instance.PlayMusic("finalBoss");
+        //MyAudioManager.Instance.PlayMusic("finalBoss");
         Bat.transform.position = batOriginalPosition.position;
         transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         fight = true;

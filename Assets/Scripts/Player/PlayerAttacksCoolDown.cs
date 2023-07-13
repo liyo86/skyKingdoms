@@ -30,9 +30,11 @@ public class PlayerAttacksCoolDown : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
         Defense();
         Shoot();
-        //SpecialAttack();
+        SpecialAttack();
+#endif
     }
 
     private void Defense()

@@ -59,7 +59,7 @@ public class RingScore : MonoBehaviour
         {
             PlusOne.StartShrinkAndMove();
             FlightLevel.Instance.ringDone++;
-            MyAudioManager.Instance.PlaySfx("ringSFX");
+         //   MyAudioManager.Instance.PlaySfx("ringSFX");
             ringDoneParticles.Play();
             PlayerUI.Instance.ScoreRingPoints();
             FlightLevel.Instance.AddSecond();

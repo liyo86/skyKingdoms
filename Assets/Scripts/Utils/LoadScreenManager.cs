@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using Managers;
+using Service;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -15,34 +17,31 @@ public class LoadScreenManager : MonoBehaviour
     private AsyncOperation async;
     private bool isLoading;
 
-    void Awake()
+    private void Start()
     {
         loadingScreenPanel.SetActive(false);
         
         loadedImg.fillAmount = 0f;
         loadedText.text = "0%";
-    }
 
-    private void Start()
-    {
-        if (SceneManager.GetActiveScene().name == "FirstLoad")
-        {
-            LoadScene();
-        }
-        else
-        {
-            MyGameManager.Instance.Init();
-        }
-
-        MyGameManager.Instance.isLoading = false;
-
-        SceneManager.sceneLoaded += OnSceneLoaded;
+         if (SceneManager.GetActiveScene().name == "FirstLoad")
+         {
+             LoadScene();
+         }
+         else
+         {
+             ServiceLocator.GetService<MyGameManager>().Init();
+         }
+ 
+         ServiceLocator.GetService<MyGameManager>().isLoading = false;
+ 
+         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     public void LoadScene(string name = "null")
     {
-        MyGameManager.Instance.isLoading = true;
-        
+        ServiceLocator.GetService<MyGameManager>().isLoading = true;
+
         if (name != "null")
             sceneName = name;
         
@@ -81,6 +80,8 @@ public class LoadScreenManager : MonoBehaviour
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        MyGameManager.Instance.Init();
+        isLoading = false;
+        loadingScreenPanel.SetActive(false);
+        ServiceLocator.GetService<MyGameManager>().Init();
     }
 }

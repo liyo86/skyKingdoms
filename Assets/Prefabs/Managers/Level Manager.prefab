@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3075435478212288859
 Transform:
   m_ObjectHideFlags: 0
@@ -44,3 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30afeb98928ea460d858eb01b22e2c62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backToScene: 0
+  ActualDialogueResponse: -1
+  Gem_Level1: {fileID: 0}
+  Gem_Level_Boss: {fileID: 0}
+  Goblin: {fileID: 0}
+  GoblinWeapon: {fileID: 0}

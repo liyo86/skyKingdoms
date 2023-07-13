@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +14,8 @@ public class Menu_ReintentarUI : InputsUI
                 RestartLevel();
                 break;
             case 1:
-                sceneManager.LoadScene("Menu_game");
+                menuCanvas.SetActive(false);
+                SceneManager.LoadScene("Menu_game");
                 break;
         }
     }

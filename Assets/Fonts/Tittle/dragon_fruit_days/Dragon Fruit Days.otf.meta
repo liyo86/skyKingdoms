@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: b8d88f0181d144ef5a3776532161203e
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Dragon Fruit Days
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 12bc641f2cc934f44b40363be14de6f9, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
