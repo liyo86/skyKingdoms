@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
 using Doublsb.Dialog;
+using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,9 +18,11 @@ namespace Managers
         public int Step => step;
 
         [SerializeField] private DialogManager dialogManager;
-        [SerializeField] private GameObject selectorManager;
         [SerializeField] private GameObject nextBtn;
         [SerializeField] private Text characterText;
+        [SerializeField] private DialogueOptions dialogueOptions;
+        [SerializeField] private TextMeshProUGUI optionA_Text;
+        [SerializeField] private TextMeshProUGUI optionB_Text;
 
         private DOTDialogAnimator dialogAnimator;
 
@@ -34,6 +38,11 @@ namespace Managers
         private const string TEXT_STORY = "Text_Story";
         private const string TEXT = "Text";
         private const string MAX_STEPS = "GetMaxStep";
+
+        private void Start()
+        {
+            dialogAnimator = GetComponent<DOTDialogAnimator>();
+        }
 
         void LateUpdate()
         {
@@ -107,11 +116,15 @@ namespace Managers
         }
         
         // Dialogos con opciones
-        public void NewOptionText(string text, string character)
+        public void NewOptionText(string text, string character, string textA, string textB, bool showOptions)
         {
             currentText = text;
 
             string characterName = character;
+
+            optionA_Text.text = textA;
+
+            optionB_Text.text = textB;
 
             DialogData dialogData = new DialogData(currentText);
 
@@ -122,6 +135,9 @@ namespace Managers
             dialogAnimator.ShowDialogBox();
 
             dialogManager.Show(dialogData);
+            
+            if (showOptions)
+                dialogueOptions.ShowOptions();
         }
         
         // Para cuando el Player controla el botón

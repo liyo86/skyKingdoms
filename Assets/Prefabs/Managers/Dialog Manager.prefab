@@ -736,7 +736,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c3a39afd25c64e41ab6ae02ab1d54f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActions: {fileID: -944628639613478452, guid: 61fcc028162a44830b980c6db5abd667, type: 3}
   selectList:
   - {fileID: 242321805}
   - {fileID: 246186239}
@@ -759,6 +758,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   Options: {fileID: 1066251869}
+  OptionsCharacter: {fileID: 0}
 --- !u!1 &1176248237
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,9 +1255,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerControl: 0
   dialogManager: {fileID: 7936080100635497474}
-  selectorManager: {fileID: 4874361706662383756}
   nextBtn: {fileID: 3234858486045871979}
   characterText: {fileID: 1359167021}
+  dialogueOptions: {fileID: 1066251871}
+  optionA_Text: {fileID: 711413842}
+  optionB_Text: {fileID: 1749785519123999580}
 --- !u!114 &8149226854420926162
 MonoBehaviour:
   m_ObjectHideFlags: 0

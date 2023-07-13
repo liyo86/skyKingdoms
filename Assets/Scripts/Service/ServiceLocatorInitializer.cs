@@ -24,27 +24,21 @@ namespace Service
         {
             var loadScreenManager = FindObjectOfType<LoadScreenManager>();
             ServiceLocator.AddService(loadScreenManager);
-            DontDestroyOnLoad(loadScreenManager.gameObject);
 
             var myGameManager = FindObjectOfType<MyGameManager>();
             ServiceLocator.AddService(myGameManager);
-            DontDestroyOnLoad(myGameManager.gameObject);
 
             var myInputManager = FindObjectOfType<MyInputManager>();
             ServiceLocator.AddService(myInputManager);
-            DontDestroyOnLoad(myInputManager.gameObject);
 
             var myAudioManager = FindObjectOfType<MyAudioManager>();
             ServiceLocator.AddService(myAudioManager);
-            DontDestroyOnLoad(myAudioManager.gameObject);
 
             var myLevelManager = FindObjectOfType<MyLevelManager>();
             ServiceLocator.AddService(myLevelManager);
-            DontDestroyOnLoad(myLevelManager.gameObject);
 
             var myDialogueManager = FindObjectOfType<MyDialogueManager>();
             ServiceLocator.AddService(myDialogueManager);
-            DontDestroyOnLoad(myDialogueManager.gameObject);
         }
     }
 }

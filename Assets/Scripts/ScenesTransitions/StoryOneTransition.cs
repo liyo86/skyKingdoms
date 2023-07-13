@@ -8,7 +8,6 @@ public class StoryOneTransition : MonoBehaviour
 {
     public static StoryOneTransition Instance;
     private bool textShowed;
-    public DialogueOptions dialogueOptions;
     private bool CanCheck;
 
     private void Awake()
@@ -28,8 +27,7 @@ public class StoryOneTransition : MonoBehaviour
                 if (!other.CompareTag(Constants.PLAYER) || textShowed || !CanCheck) return;
                 textShowed = true;
     
-                MyDialogueManager.Instance.NewOptionText(Text_Story_1.OptionText, Constants.DRAGON);
-                dialogueOptions.ShowOptions();
+                MyDialogueManager.Instance.NewOptionText(Text_Story_1.OptionText, Constants.DRAGON, "", "", true);
                 break;
         }
     }

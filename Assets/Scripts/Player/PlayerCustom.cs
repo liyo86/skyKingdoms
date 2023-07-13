@@ -1,4 +1,5 @@
 using Managers;
+using Service;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -10,31 +11,24 @@ namespace Player
     {
         [SerializeField] GameObject Boy;
         [SerializeField] GameObject Girl;
-        [SerializeField] private DialogueOptions dialogueOptions;
-        [SerializeField] private TextMeshProUGUI optionA_Text;
-        [SerializeField] private TextMeshProUGUI optionB_Text;
-        [SerializeField] private LoadScreenManager _LoadScreenManager;
-        
+
         private void OnEnable()
         {
-            MyInputManager.Instance.uiMovementAction.performed += OnMovementPerformed;
-            MyInputManager.Instance.submitAction.performed += OnSubmit;
+            ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed += OnMovementPerformed;
+            ServiceLocator.GetService<MyInputManager>().submitAction.performed += OnSubmit;
         }
 
         private void OnDisable()
         {
-            MyInputManager.Instance.uiMovementAction.performed -= OnMovementPerformed;
-            MyInputManager.Instance.submitAction.performed -= OnSubmit;
+            ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed -= OnMovementPerformed;
+            ServiceLocator.GetService<MyInputManager>().submitAction.performed -= OnSubmit;
         }
 
         void Start()
         {
             Girl.transform.rotation = Quaternion.Euler(0f, 00f, 0f);
             Boy.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-            MyDialogueManager.Instance.NewOptionText("Elige un personaje", "");
-            optionA_Text.text = "Leo";
-            optionB_Text.text = "Elle";
-            dialogueOptions.ShowOptions();
+            ServiceLocator.GetService<MyDialogueManager>().NewOptionText("Elige un personaje", "", "Leo", "Violet", true);
         }
 
         private void OnMovementPerformed(InputAction.CallbackContext context)
@@ -63,13 +57,12 @@ namespace Player
         
         private void OnSubmit(InputAction.CallbackContext context)
         {
-            Debug.Log("Entro");
-            if (MyLevelManager.Instance.ActualDialogueResponse == 1)
-                MyGameManager.Instance.Character = "M";
+            if ( ServiceLocator.GetService<MyLevelManager>().ActualDialogueResponse == 1)
+                ServiceLocator.GetService<MyGameManager>().Character = "M";
             else 
-                MyGameManager.Instance.Character = "F";
+                ServiceLocator.GetService<MyGameManager>().Character = "F";
             
-            _LoadScreenManager.LoadScene();
+            ServiceLocator.GetService<LoadScreenManager>().LoadScene("Story_0");
         }
     }
 }

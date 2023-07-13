@@ -100,7 +100,7 @@ namespace Managers
                     break;
                 default:
                     Debug.Log("No music assigned for scene: " + sceneName);
-                    MyLevelManager.Instance.Level(sceneName);
+                    ServiceLocator.GetService<MyLevelManager>().Level(sceneName);
                     break;
             }
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Managers;
+using Service;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,11 +9,8 @@ namespace UI
     public class DialogueOptions : MonoBehaviour
     {
         [Header("Configuration")]
-        //public InputActionAsset inputActions;
         public List<GameObject> selectList = new List<GameObject>();
-
-        public InputAction movementAction;
-        public InputAction submitAction;
+        
         private int actualOption = 0;
         private int maxOptions;
     
@@ -26,14 +24,14 @@ namespace UI
 
         private void OnEnable()
         {
-            MyInputManager.Instance.uiMovementAction.performed += OnMovementPerformed;
-            MyInputManager.Instance.submitAction.performed += OnSubmit;
+            ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed += OnMovementPerformed;
+            ServiceLocator.GetService<MyInputManager>().submitAction.performed += OnSubmit;
         }
 
         private void OnDisable()
         {
-            MyInputManager.Instance.uiMovementAction.performed -= OnMovementPerformed;
-            MyInputManager.Instance.submitAction.performed -= OnSubmit;
+            ServiceLocator.GetService<MyInputManager>().uiMovementAction.performed -= OnMovementPerformed;
+            ServiceLocator.GetService<MyInputManager>().submitAction.performed -= OnSubmit;
         }
 
         private void OnMovementPerformed(InputAction.CallbackContext context)
@@ -70,8 +68,8 @@ namespace UI
         private void OnSubmit(InputAction.CallbackContext context)
         {
             Options.SetActive(false);
-            MyDialogueManager.Instance.HideDialogBox();
-            MyLevelManager.Instance.DialogOptionResponse(actualOption);
+            ServiceLocator.GetService<MyDialogueManager>().HideDialogBox();
+            ServiceLocator.GetService<MyLevelManager>().DialogOptionResponse(actualOption);
         }
 
         private void ShowIcon(int option)
